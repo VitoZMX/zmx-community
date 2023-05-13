@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/zmx-chat/static/css/main.073c9b0a.css",
-    "main.js": "/zmx-chat/static/js/main.a30ae8e4.js",
+    "main.js": "/zmx-chat/static/js/main.839e5ed0.js",
     "static/js/787.7ccdee23.chunk.js": "/zmx-chat/static/js/787.7ccdee23.chunk.js",
     "static/media/preloader.svg": "/zmx-chat/static/media/preloader.d32601ba13745906f93a8d5168394815.svg",
     "index.html": "/zmx-chat/index.html",
     "main.073c9b0a.css.map": "/zmx-chat/static/css/main.073c9b0a.css.map",
-    "main.a30ae8e4.js.map": "/zmx-chat/static/js/main.a30ae8e4.js.map",
+    "main.839e5ed0.js.map": "/zmx-chat/static/js/main.839e5ed0.js.map",
     "787.7ccdee23.chunk.js.map": "/zmx-chat/static/js/787.7ccdee23.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.073c9b0a.css",
-    "static/js/main.a30ae8e4.js"
+    "static/js/main.839e5ed0.js"
   ]
 }
