@@ -5,6 +5,10 @@ import {Profile} from './components/Profile'
 
 export const publicRoutes = [
     {
+        path: PROFILE_ROUTE,
+        Component: Profile
+    },
+    {
         path: LOGIN_ROUTE,
         Component: Login
     }
@@ -12,11 +16,11 @@ export const publicRoutes = [
 
 export const privateRoutes = [
     {
-        path: CHAT_ROUTE,
-        Component: Chat
-    },
-    {
         path: PROFILE_ROUTE,
         Component: Profile
+    },
+    {
+        path: CHAT_ROUTE,
+        Component: Chat
     }
 ]
