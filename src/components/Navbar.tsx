@@ -46,6 +46,15 @@ export function Navbar() {
         auth.signOut()
     }
 
+    const getFirstNameUser = (str: string | null) => {
+        if (!str) {
+            return
+        }
+        const words = str.split(' ')
+        const nameUser = words[0].charAt(0).toUpperCase() + words[0].slice(1)
+        return nameUser
+    }
+
     const settings = [
         {text: 'My Profile', link: '/profile', icon: <PersonIcon/>},
         {text: 'Friends', link: '/friends', icon: <PeopleIcon/>},
@@ -97,7 +106,15 @@ export function Navbar() {
                         <Grid container justifyContent={'flex-end'}>
                             <ThemeProvider theme={theme}>
                                 {user ?
-                                    <Box sx={{flexGrow: 0}}>
+                                    <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                        <Typography variant="body1" sx={{
+                                            mr: 2,
+                                            textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
+                                            fontFamily: 'Roboto',
+                                            fontWeight: 400,
+                                        }}>
+                                            {getFirstNameUser(user.displayName)}
+                                        </Typography>
                                         <Tooltip title="Menu">
                                             <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
                                                 <Avatar alt={user.displayName || 'ProfileAvatar'}
@@ -125,8 +142,8 @@ export function Navbar() {
                                             {settings.map(({text, link, icon, onClick}) => (
                                                 <MenuItem key={text} onClick={onClick || handleCloseUserMenu}>
                                                     <ButtonBase
-                                                        component="a"
-                                                        href={link}
+                                                        component={NavLink}
+                                                        to={link}
                                                         style={{display: 'flex', alignItems: 'center'}}
                                                     >
                                                         {icon}
