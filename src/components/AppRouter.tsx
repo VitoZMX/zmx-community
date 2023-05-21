@@ -22,6 +22,7 @@ export function AppRouter() {
                 )}
                 <Route path="/chat" element={<Navigate to={CHAT_ROUTE}/>}/>
                 <Route path="/profile" element={<Navigate to={PROFILE_ROUTE}/>}/>
+                <Route path="/news" element={<Navigate to={PROFILE_ROUTE}/>}/>
                 <Route path="/*" element={<Navigate to={CHAT_ROUTE}/>}/>
             </Routes>
         )
