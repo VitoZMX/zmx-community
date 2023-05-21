@@ -86,7 +86,7 @@ export function Navbar() {
                             color: 'inherit',
                             textDecoration: 'none',
                         }}
-                    >ZMX Community - Chat</Typography>
+                    >ZMX Community</Typography>
                     <Typography
                         variant="h5"
                         noWrap
@@ -103,7 +103,7 @@ export function Navbar() {
                             color: 'inherit',
                             textDecoration: 'none',
                         }}
-                    >ZMX-Chat</Typography>
+                    >ZMX</Typography>
                     <Box sx={{flexGrow: 1}}>
                         <Grid container justifyContent={'flex-end'}>
                             <ThemeProvider theme={theme}>
