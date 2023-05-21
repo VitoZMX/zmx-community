@@ -13,7 +13,7 @@ export function Profile() {
     return (
         <Container style={{marginTop: '80px'}}>
             <Grid container spacing={1} alignItems="stretch">
-                <Grid item xs={4}>
+                <Grid item sm={12} md={4}>
                     <div style={{
                         backgroundColor: 'rgba(25,118,210,0.2)',
                         boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.15)',
@@ -50,7 +50,7 @@ export function Profile() {
                         }}>ID: {user?.uid}</Typography>
                     </div>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item md={8} sm={12}>
                     <div style={{
                         backgroundColor: 'rgba(25,118,210,0.2)',
                         boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.15)',
