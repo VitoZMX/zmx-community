@@ -18,6 +18,7 @@ import PersonIcon from '@mui/icons-material/Person'
 import SettingsIcon from '@mui/icons-material/Settings'
 import PeopleIcon from '@mui/icons-material/People'
 import LogoutIcon from '@mui/icons-material/Logout'
+import NewspaperIcon from '@mui/icons-material/Newspaper'
 import ChatIcon from '@mui/icons-material/Chat'
 
 const theme = createTheme({
@@ -59,6 +60,7 @@ export function Navbar() {
         {text: 'My Profile', link: '/profile', icon: <PersonIcon/>},
         {text: 'Friends', link: '/friends', icon: <PeopleIcon/>},
         {text: 'Chat', link: '/chat', icon: <ChatIcon/>},
+        {text: 'News', link: '/news', icon: <NewspaperIcon/>},
         {text: 'Settings', link: '/settings', icon: <SettingsIcon/>},
         {text: 'Log out', link: '/login', icon: <LogoutIcon/>, onClick: handleLogoutClick},
     ]
