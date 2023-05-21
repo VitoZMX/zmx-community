@@ -15,7 +15,7 @@ export const Preloader: React.FC = () => {
                       alignItems={'center'}
                       direction={'column'}>
                     <Box p={5}>
-                        <img style={{width: 400}} src={preloader}/>
+                        <img style={{width: 300}} src={preloader}/>
                     </Box>
                 </Grid>
             </Grid>
