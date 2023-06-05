@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import logo from '../assets/image/logozmx.svg'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -19,7 +19,7 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import PeopleIcon from '@mui/icons-material/People'
 import LogoutIcon from '@mui/icons-material/Logout'
 import NewspaperIcon from '@mui/icons-material/Newspaper'
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import ChatIcon from '@mui/icons-material/Chat'
 
 const theme = createTheme({
@@ -31,9 +31,9 @@ const theme = createTheme({
 })
 
 export function Navbar() {
-
     const {auth} = useContext(Context)
-    const [user] = useAuthState(auth)
+    const [user, loadingUser] = useAuthState(auth)
+    const [loading, setLoading] = useState<boolean>(true)
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
 
@@ -66,6 +66,13 @@ export function Navbar() {
         {text: 'Settings', link: '/settings', icon: <SettingsIcon/>},
         {text: 'Log out', link: '/login', icon: <LogoutIcon/>, onClick: handleLogoutClick},
     ]
+
+    useEffect(() => {
+        setLoading(true)
+        if (loadingUser === false) {
+            setLoading(false)
+        }
+    }, [loadingUser])
 
     return (
         <AppBar position="fixed" style={{backgroundColor: 'rgba(25, 118, 210, 0.8)', backdropFilter: 'blur(2px)'}}>
@@ -109,58 +116,63 @@ export function Navbar() {
                     <Box sx={{flexGrow: 1}}>
                         <Grid container justifyContent={'flex-end'}>
                             <ThemeProvider theme={theme}>
-                                {user ?
-                                    <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                        <Typography variant="body1" sx={{
-                                            mr: 2,
-                                            textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
-                                            fontFamily: 'Roboto',
-                                            fontWeight: 400,
-                                        }}>
-                                            {getFirstNameUser(user.displayName)}
-                                        </Typography>
-                                        <Tooltip title="Menu">
-                                            <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                                <Avatar alt={user.displayName || 'ProfileAvatar'}
-                                                        src={user.photoURL || undefined}
-                                                        sx={{outline: '2px solid #1976d2', bgcolor: '#1f8fa9'}}
-                                                />
-                                            </IconButton>
-                                        </Tooltip>
-                                        <Menu
-                                            sx={{mt: '40px'}}
-                                            id="menu-appbar"
-                                            anchorEl={anchorElUser}
-                                            anchorOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right',
-                                            }}
-                                            keepMounted
-                                            transformOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right',
-                                            }}
-                                            open={Boolean(anchorElUser)}
-                                            onClose={handleCloseUserMenu}
-                                        >
-                                            {settings.map(({text, link, icon, onClick}) => (
-                                                <MenuItem key={text} onClick={onClick || handleCloseUserMenu}>
-                                                    <ButtonBase
-                                                        component={NavLink}
-                                                        to={link}
-                                                        style={{display: 'flex', alignItems: 'center'}}
-                                                    >
-                                                        {icon}
-                                                        <Typography sx={{ml: 2}}>{text}</Typography>
-                                                    </ButtonBase>
-                                                </MenuItem>
-                                            ))}
-                                        </Menu>
-                                    </Box>
-                                    :
-                                    <NavLink to={LOGIN_ROUTE}>
-                                        <Button variant={'outlined'}>Login</Button>
-                                    </NavLink>
+                                {loading ?
+                                    ('')
+                                    : user ? (
+                                            <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                                <Typography variant="body1" sx={{
+                                                    mr: 2,
+                                                    textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
+                                                    fontFamily: 'Roboto',
+                                                    fontWeight: 400,
+                                                }}>
+                                                    {getFirstNameUser(user.displayName)}
+                                                </Typography>
+                                                <Tooltip title="Menu">
+                                                    <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                                                        <Avatar alt={user.displayName || 'ProfileAvatar'}
+                                                                src={user.photoURL || undefined}
+                                                                sx={{outline: '2px solid #1976d2', bgcolor: '#1f8fa9'}}
+                                                        />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Menu
+                                                    sx={{mt: '40px'}}
+                                                    id="menu-appbar"
+                                                    anchorEl={anchorElUser}
+                                                    anchorOrigin={{
+                                                        vertical: 'top',
+                                                        horizontal: 'right',
+                                                    }}
+                                                    keepMounted
+                                                    transformOrigin={{
+                                                        vertical: 'top',
+                                                        horizontal: 'right',
+                                                    }}
+                                                    open={Boolean(anchorElUser)}
+                                                    onClose={handleCloseUserMenu}
+                                                >
+                                                    {settings.map(({text, link, icon, onClick}) => (
+                                                        <MenuItem key={text} onClick={onClick || handleCloseUserMenu}>
+                                                            <ButtonBase
+                                                                component={NavLink}
+                                                                to={link}
+                                                                style={{display: 'flex', alignItems: 'center'}}
+                                                            >
+                                                                {icon}
+                                                                <Typography sx={{ml: 2}}>{text}</Typography>
+                                                            </ButtonBase>
+                                                        </MenuItem>
+                                                    ))}
+                                                </Menu>
+                                            </Box>
+                                        )
+                                        :
+                                        (
+                                            <NavLink to={LOGIN_ROUTE}>
+                                                <Button variant={'outlined'}>Login</Button>
+                                            </NavLink>
+                                        )
                                 }
                             </ThemeProvider>
                         </Grid>
