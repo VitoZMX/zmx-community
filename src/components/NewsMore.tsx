@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {Container} from '@material-ui/core'
 import Grid from '@mui/material/Grid'
 import {useNavigate, useParams} from 'react-router-dom'
@@ -6,6 +6,8 @@ import {collection, doc, getDoc, getFirestore} from 'firebase/firestore'
 import {Preloader} from './common/Preloader'
 import Button from '@mui/material/Button'
 import ReplyIcon from '@mui/icons-material/Reply'
+import {Context} from '../index'
+import {useAuthState} from 'react-firebase-hooks/auth'
 
 export type PathParamsType = {
     newsID?: string
@@ -24,6 +26,8 @@ type NewsType = {
 }
 
 export function NewsMore() {
+    const {auth} = useContext(Context)
+    const [user] = useAuthState(auth)
     const params = useParams<PathParamsType>()
     const [news, setNews] = useState<NewsType>()
     const navigate = useNavigate()
@@ -60,10 +64,14 @@ export function NewsMore() {
 
     return (
         <Container style={{marginTop: '70px'}}>
-            <Button variant="outlined" onClick={handleClickGoToNewsPage}>
-                <ReplyIcon/>
-                Back to news
-            </Button>
+            {user ?
+                <Button variant="outlined" onClick={handleClickGoToNewsPage}>
+                    <ReplyIcon/>
+                    Back to news
+                </Button>
+                :
+                ''
+            }
             <Grid container spacing={1} alignItems="stretch">
                 {news ? (
                     <div style={{width: '100%'}}>
