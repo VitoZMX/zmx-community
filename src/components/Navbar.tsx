@@ -153,16 +153,17 @@ export function Navbar() {
                                                     onClose={handleCloseUserMenu}
                                                 >
                                                     {settings.map(({text, link, icon, onClick}) => (
-                                                        <MenuItem key={text} onClick={onClick || handleCloseUserMenu}>
-                                                            <ButtonBase
-                                                                component={NavLink}
-                                                                to={link}
-                                                                style={{display: 'flex', alignItems: 'center'}}
-                                                            >
+                                                        <ButtonBase
+                                                            component={NavLink}
+                                                            to={link}
+                                                            style={{display: 'flex', alignItems: 'center'}}
+                                                        >
+                                                            <MenuItem style={{width: '100%'}} key={text}
+                                                                      onClick={onClick || handleCloseUserMenu}>
                                                                 {icon}
                                                                 <Typography sx={{ml: 2}}>{text}</Typography>
-                                                            </ButtonBase>
-                                                        </MenuItem>
+                                                            </MenuItem>
+                                                        </ButtonBase>
                                                     ))}
                                                 </Menu>
                                             </Box>
