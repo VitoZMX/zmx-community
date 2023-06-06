@@ -120,19 +120,21 @@ export function Navbar() {
                                     ('')
                                     : user ? (
                                             <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                                <Typography variant="body1" sx={{
-                                                    mr: 2,
-                                                    textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
-                                                    fontFamily: 'Roboto',
-                                                    fontWeight: 400,
-                                                }}>
-                                                    {getFirstNameUser(user.displayName)}
-                                                </Typography>
                                                 <Tooltip title="Menu">
-                                                    <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                                                    <IconButton onClick={handleOpenUserMenu}
+                                                                sx={{p: 0, padding: '0 16px', borderRadius: '10px'}}>
+                                                        <Typography variant="body1" sx={{
+                                                            color: 'white',
+                                                            mr: 2,
+                                                            textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
+                                                            fontFamily: 'Roboto',
+                                                            fontWeight: 400,
+                                                        }}>
+                                                            {getFirstNameUser(user.displayName)}
+                                                        </Typography>
                                                         <Avatar alt={user.displayName || 'ProfileAvatar'}
                                                                 src={user.photoURL || undefined}
-                                                                sx={{outline: '2px solid #1976d2', bgcolor: '#1f8fa9'}}
+                                                                sx={{bgcolor: '#53b227'}}
                                                         />
                                                     </IconButton>
                                                 </Tooltip>
