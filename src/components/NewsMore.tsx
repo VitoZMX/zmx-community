@@ -63,21 +63,21 @@ export function NewsMore() {
     }, [params.newsID])
 
     return (
-        <Container style={{marginTop: '70px'}}>
-            {user ?
-                <Button variant="outlined" onClick={handleClickGoToNewsPage}>
-                    <ReplyIcon/>
-                    Back to news
-                </Button>
-                :
-                ''
-            }
+        <Container style={{marginTop: '80px'}}>
             <Grid container spacing={1} alignItems="stretch">
+                {user ?
+                    <Button variant="outlined" onClick={handleClickGoToNewsPage}>
+                        <ReplyIcon/>
+                        Back to news
+                    </Button>
+                    :
+                    ''
+                }
                 {news ? (
                     <div style={{width: '100%'}}>
-                        <h1 style={{textIndent: '12px'}}>{news?.title}</h1>
+                        <h1 style={{textIndent: '12px', fontWeight: '500'}}>{news?.title}</h1>
                         <hr/>
-                        <h2 style={{textIndent: '12px'}}>
+                        <h2 style={{textIndent: '12px', fontWeight: '400'}}>
                             <pre style={{
                                 whiteSpace: 'pre-wrap',
                                 overflowWrap: 'break-word',
