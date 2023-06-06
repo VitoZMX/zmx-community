@@ -1,10 +1,19 @@
-import {CHAT_ROUTE, LOGIN_ROUTE, MORE_NEWS_ROUTE, NEWS_ROUTE, PROFILE_ROUTE, TODO_ROUTE} from './utils/constRoute'
+import {
+    CHAT_ROUTE,
+    LOGIN_ROUTE,
+    MORE_NEWS_ROUTE,
+    NEWS_ROUTE,
+    PROFILE_ROUTE,
+    SETTING_ROUTE,
+    TODO_ROUTE
+} from './utils/constRoute'
 import {Login} from './components/Login'
 import {Chat} from './components/Chat'
 import {Profile} from './components/Profile'
 import {NewsPage} from './components/NewsPage'
 import {ToDoList} from './components/ToDoList'
 import {NewsMore} from './components/NewsMore'
+import {SettingPage} from './components/SettingPage'
 
 export const publicRoutes = [
     {
@@ -41,5 +50,9 @@ export const privateRoutes = [
     {
         path: MORE_NEWS_ROUTE,
         Component: NewsMore
+    },
+    {
+        path: SETTING_ROUTE,
+        Component: SettingPage
     }
 ]
