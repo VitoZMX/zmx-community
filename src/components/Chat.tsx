@@ -5,7 +5,7 @@ import {collection, getFirestore, orderBy, query} from 'firebase/firestore'
 import {Preloader} from './common/Preloader'
 import {Message} from './Message'
 import {AddMessageForm} from './AddMessageForm'
-import {Context} from '../index'
+import {Context} from '../App'
 import {useAuthState} from 'react-firebase-hooks/auth'
 
 type MessageType = {

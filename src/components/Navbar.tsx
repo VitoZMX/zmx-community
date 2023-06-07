@@ -11,7 +11,6 @@ import {createTheme, ThemeProvider} from '@mui/material/styles'
 import {NavLink} from 'react-router-dom'
 import {LOGIN_ROUTE} from '../utils/constRoute'
 import {useAuthState} from 'react-firebase-hooks/auth'
-import {Context} from '../index'
 import Avatar from '@mui/material/Avatar'
 import {IconButton, Menu, MenuItem, Tooltip} from '@mui/material'
 import PersonIcon from '@mui/icons-material/Person'
@@ -21,6 +20,7 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import NewspaperIcon from '@mui/icons-material/Newspaper'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import ChatIcon from '@mui/icons-material/Chat'
+import {Context} from '../App'
 
 const theme = createTheme({
     palette: {

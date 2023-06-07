@@ -3,7 +3,7 @@ import {privateRoutes, publicRoutes} from '../routes'
 import {Navigate, Route, Routes} from 'react-router-dom'
 import {CHAT_ROUTE, LOGIN_ROUTE, PROFILE_ROUTE} from '../utils/constRoute'
 import {useAuthState} from 'react-firebase-hooks/auth'
-import {Context} from '../index'
+import {Context} from '../App'
 import {Preloader} from './common/Preloader'
 
 export function AppRouter() {

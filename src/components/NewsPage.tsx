@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react'
 import {Container} from '@material-ui/core'
 import Grid from '@mui/material/Grid'
-import {Context} from '../index'
+import {Context} from '../App'
 import {useAuthState} from 'react-firebase-hooks/auth'
 import {CartNews} from './CartNews'
 import {AddNewsForm} from './AddNewsForm'

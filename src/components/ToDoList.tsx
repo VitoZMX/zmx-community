@@ -1,8 +1,8 @@
 import React, {useContext} from 'react'
 import {Container} from '@material-ui/core'
 import Grid from '@mui/material/Grid'
-import {Context} from '../index'
 import {useAuthState} from 'react-firebase-hooks/auth'
+import { Context } from '../App'
 
 export function ToDoList() {
     const {auth} = useContext(Context)

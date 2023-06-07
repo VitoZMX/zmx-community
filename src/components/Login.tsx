@@ -1,7 +1,7 @@
 import React, {useContext} from 'react'
 import s from './Login.module.css'
 import {Button, Container, Grid} from '@material-ui/core'
-import {Context} from '../index'
+import { Context } from '../App'
 import {
     AuthProvider,
     FacebookAuthProvider,

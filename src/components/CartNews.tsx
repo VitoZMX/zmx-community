@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import {Context} from '../index'
+import {Context} from '../App'
 import {useAuthState} from 'react-firebase-hooks/auth'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'

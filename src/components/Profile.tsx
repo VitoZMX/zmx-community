@@ -1,7 +1,7 @@
 import React, {useContext} from 'react'
 import {Container} from '@material-ui/core'
 import Grid from '@mui/material/Grid'
-import {Context} from '../index'
+import { Context } from '../App'
 import {useAuthState} from 'react-firebase-hooks/auth'
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
