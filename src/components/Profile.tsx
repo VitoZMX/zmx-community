@@ -2,14 +2,13 @@ import React, {useContext} from 'react'
 import {Container} from '@material-ui/core'
 import Grid from '@mui/material/Grid'
 import {Context} from '../App'
-import {useAuthState} from 'react-firebase-hooks/auth'
 import Typography from '@mui/material/Typography'
 import CardMedia from '@mui/material/CardMedia'
 import imgF from '../assets/image/logoNoImg.png'
 
 export function Profile() {
     const {auth} = useContext(Context)
-    const [user] = useAuthState(auth)
+    const {user} = useContext(Context)
 
     return (
         <Container style={{marginTop: '80px'}}>

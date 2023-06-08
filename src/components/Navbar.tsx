@@ -38,6 +38,8 @@ export function Navbar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
 
+    setUser(profile)
+
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget)
     }

@@ -16,8 +16,8 @@ initializeApp(firebaseConfig)
 type ContextType = {
     auth: ReturnType<typeof getAuth>;
     firestore: ReturnType<typeof getFirestore>;
-    user: FirebaseUser | null;
-    setUser: React.Dispatch<React.SetStateAction<FirebaseUser | null>>;
+    user: FirebaseUser | null | undefined;
+    setUser: (user: FirebaseUser | null | undefined) => void;
 }
 
 const auth = getAuth()
@@ -28,11 +28,11 @@ export const Context = createContext<ContextType>({
     firestore: getFirestore(),
     user: null,
     setUser: () => {
-    }
+    },
 })
 
 export function App() {
-    const [user, setUser] = useState<FirebaseUser | null>(null)
+    const [user, setUser] = useState<FirebaseUser | null | undefined>(null)
 
     const theme = createTheme({
         palette: {
@@ -49,8 +49,7 @@ export function App() {
                 <Context.Provider value={{
                     auth,
                     firestore,
-                    user,
-                    setUser
+                    user, setUser
                 }}>
                     <div>
                         <Navbar/>
