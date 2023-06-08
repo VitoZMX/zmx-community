@@ -32,7 +32,8 @@ const theme = createTheme({
 
 export function Navbar() {
     const {auth} = useContext(Context)
-    const [user, loadingUser] = useAuthState(auth)
+    const [profile, loadingUser] = useAuthState(auth)
+    const {user, setUser} = useContext(Context)
     const [loading, setLoading] = useState<boolean>(true)
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
