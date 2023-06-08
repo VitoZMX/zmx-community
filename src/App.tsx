@@ -17,8 +17,9 @@ type ContextType = {
     auth: ReturnType<typeof getAuth>;
     firestore: ReturnType<typeof getFirestore>;
     user: FirebaseUser | null;
-    setUser: (user: FirebaseUser | null) => void;
+    setUser: React.Dispatch<React.SetStateAction<FirebaseUser | null>>;
 }
+
 const auth = getAuth()
 const firestore = getFirestore()
 
@@ -27,7 +28,7 @@ export const Context = createContext<ContextType>({
     firestore: getFirestore(),
     user: null,
     setUser: () => {
-    },
+    }
 })
 
 export function App() {
@@ -48,7 +49,8 @@ export function App() {
                 <Context.Provider value={{
                     auth,
                     firestore,
-                    user, setUser
+                    user,
+                    setUser
                 }}>
                     <div>
                         <Navbar/>
