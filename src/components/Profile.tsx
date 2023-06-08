@@ -1,10 +1,11 @@
 import React, {useContext} from 'react'
 import {Container} from '@material-ui/core'
 import Grid from '@mui/material/Grid'
-import { Context } from '../App'
+import {Context} from '../App'
 import {useAuthState} from 'react-firebase-hooks/auth'
-import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
+import CardMedia from '@mui/material/CardMedia'
+import imgF from '../assets/image/logoNoImg.png'
 
 export function Profile() {
     const {auth} = useContext(Context)
@@ -13,41 +14,32 @@ export function Profile() {
     return (
         <Container style={{marginTop: '80px'}}>
             <Grid container spacing={1} alignItems="stretch">
-                <Grid item sm={12} md={4}>
+                <Grid item sm={12} lg={4} md={4} xs={12}>
                     <div style={{
                         backgroundColor: 'rgba(25,118,210,0.2)',
                         boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.15)',
                         borderRadius: '12px',
-                        padding: '15px',
-                        height: '100%'
                     }}>
-                        <Avatar alt={user?.displayName || 'ProfileAvatar'}
-                                src={user?.photoURL || undefined}
-                                sx={{width: 200, height: 200, boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)'}}
+                        <CardMedia
+                            sx={{objectFit: 'cover', height: '250px', borderRadius: '12px  12px 0 0 '}}
+                            component="img"
+                            image={user?.photoURL || imgF}
+                            alt="Your avatar"
                         />
-                        <Typography variant="h5" sx={{
-                            mr: 2,
-                            fontFamily: 'Roboto',
-                            fontWeight: 100,
-                            color: 'black'
-                        }}>{user?.email}</Typography>
-                        <h4>Тут должна быть информация о тебе брат!Тут должна быть информация о тебе брат!Тут должна
-                            быть
-                            информация о тебе брат!Тут должна быть информация о тебе брат!Тут должна быть информация о
-                            тебе
-                            брат!</h4>
-                        <Typography variant="subtitle2" sx={{
-                            mr: 2,
-                            fontFamily: 'Roboto',
-                            fontWeight: 100,
-                            color: 'white'
-                        }}>Account created: {user?.metadata.creationTime}</Typography>
-                        <Typography variant="subtitle2" sx={{
-                            mr: 2,
-                            fontFamily: 'Roboto',
-                            fontWeight: 100,
-                            color: 'white'
-                        }}>ID: {user?.uid}</Typography>
+                        <div style={{padding: '10px'}}>
+                            <Typography variant="subtitle2" sx={{
+                                mr: 2,
+                                fontFamily: 'Roboto',
+                                fontWeight: 100,
+                                color: 'white'
+                            }}>Account created: {user?.metadata.creationTime}</Typography>
+                            <Typography variant="subtitle2" sx={{
+                                mr: 2,
+                                fontFamily: 'Roboto',
+                                fontWeight: 100,
+                                color: 'white'
+                            }}>ID: {user?.uid}</Typography>
+                        </div>
                     </div>
                 </Grid>
                 <Grid item md={8} sm={12}>
