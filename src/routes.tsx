@@ -1,5 +1,6 @@
 import {
-    CHAT_ROUTE, HOME_ROUTE,
+    CHAT_ROUTE,
+    HOME_ROUTE,
     LOGIN_ROUTE,
     MORE_NEWS_ROUTE,
     NEWS_ROUTE,
@@ -14,7 +15,7 @@ import {NewsPage} from './components/NewsPage'
 import {ToDoList} from './components/ToDoList'
 import {NewsMore} from './components/NewsMore'
 import {SettingPage} from './components/SettingPage'
-import { HomePage } from './components/HomePage'
+import {HomePage} from './components/HomePage'
 
 export const publicRoutes = [
     {
@@ -22,12 +23,12 @@ export const publicRoutes = [
         Component: HomePage
     },
     {
-        path: PROFILE_ROUTE,
-        Component: Profile
-    },
-    {
         path: LOGIN_ROUTE,
         Component: Login
+    },
+    {
+        path: PROFILE_ROUTE,
+        Component: Profile
     },
     {
         path: MORE_NEWS_ROUTE,
