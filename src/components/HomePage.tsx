@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
         height: 'auto',
         marginBottom: theme.spacing(2),
     },
-
 }))
 
 function srcset(image: string, size: number, rows = 1, cols = 1) {
@@ -43,21 +42,22 @@ export function HomePage() {
     const classes = useStyles()
     const [imageUrls, setImageUrls] = useState<ImageData[]>([])
 
+    const fetchImageUrls = async () => {
+        const storage = getStorage()
+        const storageRef = ref(storage, 'homePageImg/')
+        const allFiles = await listAll(storageRef)
+        const urls = await Promise.all(
+            Array.from({length: 9}).map(async () => {
+                const randomIndex = Math.floor(Math.random() * allFiles.items.length)
+                const randomFile = allFiles.items[randomIndex]
+                const url = await getDownloadURL(randomFile)
+                return {img: url, rows: 1, cols: 1}
+            })
+        )
+        setImageUrls(urls)
+    }
+
     useEffect(() => {
-        const fetchImageUrls = async () => {
-            const storage = getStorage()
-            const storageRef = ref(storage, 'homePageImg/')
-            const allFiles = await listAll(storageRef)
-            const urls = await Promise.all(
-                Array.from({length: 9}).map(async () => {
-                    const randomIndex = Math.floor(Math.random() * allFiles.items.length)
-                    const randomFile = allFiles.items[randomIndex]
-                    const url = await getDownloadURL(randomFile)
-                    return {img: url, rows: 1, cols: 1}
-                })
-            )
-            setImageUrls(urls)
-        }
         fetchImageUrls()
     }, [])
 
@@ -65,7 +65,7 @@ export function HomePage() {
         <Container style={{marginTop: '80px'}}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={8}>
-                    <Typography variant="h2" style={{textIndent: '20px'}} gutterBottom>
+                    <Typography variant="h3" style={{textIndent: '20px'}} gutterBottom>
                         Добро пожаловать в сообщество ZMX!
                     </Typography>
                     <Typography variant="body1" gutterBottom>

@@ -8,7 +8,7 @@ import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
 import {ButtonBase, Grid} from '@material-ui/core'
 import {createTheme, ThemeProvider} from '@mui/material/styles'
-import {NavLink} from 'react-router-dom'
+import {NavLink, useNavigate} from 'react-router-dom'
 import {LOGIN_ROUTE} from '../utils/constRoute'
 import {useAuthState} from 'react-firebase-hooks/auth'
 import Avatar from '@mui/material/Avatar'
@@ -37,9 +37,13 @@ export function Navbar() {
     const [loading, setLoading] = useState<boolean>(true)
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
+    const navigate = useNavigate()
 
-    setUser(profile)
+    //setUser(profile)
 
+    const handleLinkClick = () => {
+        navigate('/home')
+    }
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget)
     }
@@ -48,6 +52,7 @@ export function Navbar() {
     }
     const handleLogoutClick = () => {
         setAnchorElUser(null)
+        setUser(null)
         auth.signOut()
     }
 
@@ -86,24 +91,23 @@ export function Navbar() {
                     <Typography
                         variant="h6"
                         noWrap
-                        component="a"
-                        href="/"
+                        style={{cursor: 'pointer'}}
+                        onClick={handleLinkClick}
                         sx={{
                             mr: 6,
                             display: {xs: 'none', md: 'flex'},
                             textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
                             fontFamily: 'Roboto',
                             fontWeight: 300,
-                            /*letterSpacing: '.1rem',*/
                             color: 'inherit',
                             textDecoration: 'none',
                         }}
                     >ZMX Community</Typography>
                     <Typography
+                        style={{cursor: 'pointer'}}
                         variant="h5"
                         noWrap
-                        component="a"
-                        href=""
+                        onClick={handleLinkClick}
                         sx={{
                             mr: 2,
                             display: {xs: 'flex', md: 'none'},

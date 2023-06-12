@@ -1,7 +1,8 @@
 import React, {useContext} from 'react'
 import s from './Login.module.css'
+import {useNavigate} from 'react-router-dom'
 import {Button, Container, Grid} from '@material-ui/core'
-import { Context } from '../App'
+import {Context} from '../App'
 import {
     AuthProvider,
     FacebookAuthProvider,
@@ -18,9 +19,11 @@ import FacebookIcon from '@mui/icons-material/Facebook'
 import AppleIcon from '@mui/icons-material/Apple'
 import WindowIcon from '@mui/icons-material/Window'
 import Stack from '@mui/material/Stack'
+import HomeIcon from '@mui/icons-material/Home'
 
 export function Login() {
     const {auth} = useContext(Context)
+    const navigate = useNavigate()
     const googleProvider = new GoogleAuthProvider()
     const githubProvider = new GithubAuthProvider()
     const twitterProvider = new TwitterAuthProvider()
@@ -33,11 +36,16 @@ export function Login() {
     facebookProvider.setCustomParameters({
         'display': 'popup'
     })
+    googleProvider.addScope('email')
+
+    const handleClickBtnToHome = () => {
+        navigate('/home')
+    }
 
     const login = async (provider: AuthProvider) => {
         try {
             const result = await signInWithPopup(auth, provider)
-            console.log(result.user)
+            console.log('Данные пользователя из Login:', result.user)
         } catch (error) {
             console.error(error)
         }
@@ -62,7 +70,8 @@ export function Login() {
                         <Button className={s.loginButton}
                                 disabled={true}
                                 startIcon={<AppleIcon/>}
-                                onClick={() => {}}
+                                onClick={() => {
+                                }}
                                 variant={'outlined'}>Login with APPLE</Button>
                         <Button className={s.loginButton}
                                 startIcon={<TwitterIcon/>}
@@ -80,6 +89,10 @@ export function Login() {
                                 startIcon={<WindowIcon/>}
                                 onClick={() => login(microsoftProvider)}
                                 variant={'outlined'}>Login with Microsoft</Button>
+                        <Button color="primary"
+                                startIcon={<HomeIcon/>}
+                                onClick={handleClickBtnToHome}
+                                variant="outlined">HOME PAGE</Button>
                     </Stack>
                 </Grid>
             </Grid>

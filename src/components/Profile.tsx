@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import {Container} from '@material-ui/core'
+import {Box, Container} from '@material-ui/core'
 import Grid from '@mui/material/Grid'
 import {Context} from '../App'
 import Typography from '@mui/material/Typography'
@@ -18,20 +18,25 @@ export function Profile() {
                         backgroundColor: 'rgba(25,118,210,0.2)',
                         boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.15)',
                         borderRadius: '12px',
+                        height: '100%',
                     }}>
                         <CardMedia
-                            sx={{objectFit: 'cover', height: '250px', borderRadius: '12px  12px 0 0 '}}
+                            sx={{
+                                objectFit: 'cover', minHeight: '250px',
+                                maxHeight: '400px', borderRadius: '12px  12px 0 0 '
+                            }}
                             component="img"
                             image={user?.photoURL || imgF}
                             alt="Your avatar"
                         />
                         <div style={{padding: '10px'}}>
+                            <Typography style={{marginBottom: '10px'}} variant="body1">Роль: {user?.role}</Typography>
                             <Typography variant="subtitle2" sx={{
                                 mr: 2,
                                 fontFamily: 'Roboto',
                                 fontWeight: 100,
                                 color: 'white'
-                            }}>Account created: {user?.metadata.creationTime}</Typography>
+                            }}>Account created: {user?.metadata?.creationTime}</Typography>
                             <Typography variant="subtitle2" sx={{
                                 mr: 2,
                                 fontFamily: 'Roboto',
@@ -49,17 +54,33 @@ export function Profile() {
                         padding: '15px',
                         height: '100%'
                     }}>
-                        <Typography variant="h3" sx={{
+                        <Typography variant="h4" sx={{
                             mr: 2,
                             textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
                             fontFamily: 'Roboto',
                             fontWeight: 350,
                             color: 'black'
                         }}>{user?.displayName}</Typography>
-                        <h4>И тут тоже нужно что то написать о тебе, братишка! И тут тоже нужно что то написать о тебе,
-                            братишка!И тут тоже нужно что то написать о тебе, братишка!И тут тоже нужно что то написать
-                            о
-                            тебе, братишка!</h4>
+                        <Box marginBottom={'8px'}>
+                            <Typography variant="h6">Email:</Typography>
+                            <Typography variant="body1">{user?.email}</Typography>
+                        </Box>
+                        <Box marginBottom={'8px'}>
+                            <Typography variant="h6">Возраст:</Typography>
+                            <Typography variant="body1">{user?.age}</Typography>
+                        </Box>
+                        <Box marginBottom={'8px'}>
+                            <Typography variant="h6">Пол:</Typography>
+                            <Typography variant="body1">{user?.sex}</Typography>
+                        </Box>
+                        <Box marginBottom={'8px'}>
+                            <Typography variant="h6">Страна:</Typography>
+                            <Typography variant="body1">{user?.country}</Typography>
+                        </Box>
+                        <Box marginBottom={'8px'}>
+                            <Typography variant="h6">Обо мне:</Typography>
+                            <Typography variant="body1">{user?.aboutYou}</Typography>
+                        </Box>
                     </div>
                 </Grid>
                 <Grid item xs={12}>
