@@ -1,16 +1,17 @@
 {
   "files": {
-    "main.css": "/currency-watch/static/css/main.073c9b0a.css",
-    "main.js": "/currency-watch/static/js/main.69db810c.js",
-    "static/js/787.e2ccf055.chunk.js": "/currency-watch/static/js/787.e2ccf055.chunk.js",
-    "static/media/preloader.svg": "/currency-watch/static/media/preloader.d32601ba13745906f93a8d5168394815.svg",
-    "index.html": "/currency-watch/index.html",
-    "main.073c9b0a.css.map": "/currency-watch/static/css/main.073c9b0a.css.map",
-    "main.69db810c.js.map": "/currency-watch/static/js/main.69db810c.js.map",
-    "787.e2ccf055.chunk.js.map": "/currency-watch/static/js/787.e2ccf055.chunk.js.map"
+    "main.css": "/zmx-chat/static/css/main.e6c13ad2.css",
+    "main.js": "/zmx-chat/static/js/main.b57c88bc.js",
+    "static/js/787.7ccdee23.chunk.js": "/zmx-chat/static/js/787.7ccdee23.chunk.js",
+    "static/media/logozmx.svg": "/zmx-chat/static/media/logozmx.48b20bb4462cdce19f3be72ea993422e.svg",
+    "static/media/preloader.svg": "/zmx-chat/static/media/preloader.d32601ba13745906f93a8d5168394815.svg",
+    "index.html": "/zmx-chat/index.html",
+    "main.e6c13ad2.css.map": "/zmx-chat/static/css/main.e6c13ad2.css.map",
+    "main.b57c88bc.js.map": "/zmx-chat/static/js/main.b57c88bc.js.map",
+    "787.7ccdee23.chunk.js.map": "/zmx-chat/static/js/787.7ccdee23.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.073c9b0a.css",
-    "static/js/main.69db810c.js"
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.b57c88bc.js"
   ]
 }
