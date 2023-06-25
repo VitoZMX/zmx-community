@@ -1,6 +1,6 @@
 # Can go to chat
 
-[ZMX Chat](http://vitozmx.github.io/zmx-chat).
+[ZMX Сommunity](http://vitozmx.github.io/zmx-community).
 
 ## Available Scripts
 

@@ -1,8 +1,8 @@
 {
-  "name": "zmx-chat",
-  "version": "0.1.0",
+  "name": "zmx-community",
+  "version": "0.2.0",
   "private": true,
-  "homepage": "https://vitozmx.github.io/zmx-chat",
+  "homepage": "https://vitozmx.github.io/zmx-community",
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
