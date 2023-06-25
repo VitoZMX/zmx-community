@@ -67,7 +67,7 @@ export function Navbar() {
 
     const settings = [
         {text: 'My Profile', link: '/profile', icon: <PersonIcon/>},
-        {text: 'Friends', link: '/friends', icon: <PeopleIcon/>},
+        {text: 'Users', link: '/users', icon: <PeopleIcon/>},
         {text: 'Chat', link: '/chat', icon: <ChatIcon/>},
         {text: 'News', link: '/news', icon: <NewspaperIcon/>},
         {text: 'To Do List', link: '/todo', icon: <FormatListBulletedIcon/>},
@@ -129,7 +129,11 @@ export function Navbar() {
                                             <Box sx={{display: 'flex', alignItems: 'center'}}>
                                                 <Tooltip title="Menu">
                                                     <IconButton onClick={handleOpenUserMenu}
-                                                                sx={{p: 0, padding: '0 16px', borderRadius: '10px'}}>
+                                                                sx={{
+                                                                    p: 0,
+                                                                    padding: '0 0 0 16px',
+                                                                    borderRadius: '10px 20px 20px 10px'
+                                                                }}>
                                                         <Typography variant="body1" sx={{
                                                             color: 'white',
                                                             mr: 2,
@@ -166,8 +170,9 @@ export function Navbar() {
                                                             component={NavLink}
                                                             to={link}
                                                             style={{display: 'flex', alignItems: 'center'}}
+                                                            key={text}
                                                         >
-                                                            <MenuItem style={{width: '100%'}} key={text}
+                                                            <MenuItem style={{width: '100%'}}
                                                                       onClick={onClick || handleCloseUserMenu}>
                                                                 {icon}
                                                                 <Typography sx={{ml: 2}}>{text}</Typography>

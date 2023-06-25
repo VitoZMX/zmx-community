@@ -7,28 +7,20 @@ import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import {CardActionArea, useTheme} from '@mui/material'
 import {NavLink} from 'react-router-dom'
-
-type CartNewsPropsType = {
-    img: string,
-    title: string,
-    text: string,
-    id: string
-}
+import { CartNewsPropsType } from '../types/types'
 
 export function CartNews({img, title, text, id}: CartNewsPropsType) {
     const {auth} = useContext(Context)
-    const [user] = useAuthState(auth)
+    const {user} = useContext(Context)
     const theme = useTheme()
 
     return (
-
         <Card sx={{
             maxWidth: theme.breakpoints.down('sm') ? 'auto' : '345',
             display: 'flex',
             alignItems: 'flex-start',
             height: '100%'
         }}>
-
             <CardActionArea component={NavLink} to={`/news/${id}`} sx={{height: '100%'}}>
                 <CardMedia
                     sx={{objectFit: 'cover', height: '140px'}}

@@ -5,7 +5,6 @@ import {addDoc, collection, getFirestore, serverTimestamp} from 'firebase/firest
 
 export function AddMessageForm({user}: any) {
     const [value, setValue] = useState('')
-
     const inputRef = React.useRef<HTMLInputElement>()
     const messagesCollection = collection(getFirestore(), 'messages')
 
@@ -17,7 +16,7 @@ export function AddMessageForm({user}: any) {
     const keyEnterHandle = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault()
-            sendMessageHandler()
+            sendMessageHandler().then()
         }
         return
     }
@@ -54,7 +53,8 @@ export function AddMessageForm({user}: any) {
         <div style={{width: '100%'}}>
             <TextField
                 fullWidth
-                maxRows={2}
+                multiline
+                maxRows={4}
                 variant={'outlined'}
                 value={value}
                 inputRef={inputRef}

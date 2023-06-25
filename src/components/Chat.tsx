@@ -7,22 +7,12 @@ import {Message} from './Message'
 import {AddMessageForm} from './AddMessageForm'
 import {Context} from '../App'
 import {useAuthState} from 'react-firebase-hooks/auth'
-
-type MessageType = {
-    id: string;
-    photoURL: string;
-    displayName: string;
-    message: string;
-    createdAt: {
-        seconds: number;
-    } | null;
-    userId: string
-}
+import {ChatMessageType} from '../types/types'
 
 export const Chat: React.FC = () => {
     const {auth, firestore} = useContext(Context)
     const [user] = useAuthState(auth)
-    const [messages, setMessages] = useState<MessageType[]>([])
+    const [messages, setMessages] = useState<ChatMessageType[]>([])
     const [loading, setLoading] = useState<boolean>(true) // добавляем состояние загрузки
     const [isAutoScroll, setIsAutoScroll] = useState(true)
     const messagesAnchorRef = useRef<HTMLDivElement>(null)
@@ -78,7 +68,8 @@ export const Chat: React.FC = () => {
                             width: '100%',
                             height: '90vh',
                             border: '1px solid black',
-                            overflowY: 'auto'
+                            overflowY: 'auto',
+                            overflowX: 'hidden'
                         }}
                     >
                         {messages.map((msg) => (

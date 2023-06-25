@@ -10,33 +10,11 @@ import {getAuth, onAuthStateChanged} from 'firebase/auth'
 import {doc, getDoc, getFirestore, setDoc} from 'firebase/firestore'
 import {firebaseConfig} from './firebaseConfig'
 import {Preloader} from './components/common/Preloader'
+import {ContextType, userType} from './types/types'
 
 initializeApp(firebaseConfig)
 
-export type userType = {
-    uid: string;
-    displayName: string | null;
-    email?: string | null;
-    age?: string | null;
-    country?: string | null;
-    sex?: string | null;
-    aboutYou?: string | null;
-    barkMode?: boolean;
-    photoURL?: string | null;
-    role?: string;
-    metadata?: {
-        creationTime?: string;
-        lastSignInTime?: string;
-    };
-}
 export type FirebaseUserAndUserType = userType & ReturnType<typeof getAuth>
-
-type ContextType = {
-    auth: ReturnType<typeof getAuth>;
-    firestore: ReturnType<typeof getFirestore>;
-    user: FirebaseUserAndUserType | null | undefined;
-    setUser: (user: FirebaseUserAndUserType | null | undefined) => void;
-}
 
 const auth = getAuth()
 const firestore = getFirestore()
@@ -47,10 +25,14 @@ export const Context = createContext<ContextType>({
     user: null,
     setUser: () => {
     },
+    userFriends: [],
+    setUserFriends: () => {
+    },
 })
 
 export function App() {
-    const [user, setUser] = useState<FirebaseUserAndUserType | null | undefined>(null)
+    const [user, setUser] = useState<FirebaseUserAndUserType | null>(null)
+    const [userFriends, setUserFriends] = useState<userType[]>([])
     const [loading, setLoading] = useState<boolean>(false)
 
     const theme = createTheme({
@@ -94,6 +76,7 @@ export function App() {
                             barkMode: false,
                             photoURL: user.photoURL,
                             role: 'User',
+                            friends: []
                         }
                         const userDocRef = doc(getFirestore(), 'users', user.uid)
                         await setDoc(userDocRef, newUserData)
@@ -106,7 +89,6 @@ export function App() {
                 }
             }
         )
-        //setLoading(false)
         return () => unsubscribe()
     }, [])
 
@@ -117,7 +99,8 @@ export function App() {
                 <Context.Provider value={{
                     auth,
                     firestore,
-                    user, setUser
+                    user, setUser,
+                    userFriends, setUserFriends
                 }}>
                     <div>
                         {loading ?
