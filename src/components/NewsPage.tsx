@@ -8,23 +8,16 @@ import {AddNewsForm} from './AddNewsForm'
 import {collection, getFirestore, orderBy, query} from 'firebase/firestore'
 import logoNoImg from '../assets/image/logoNoImg.png'
 import {useCollection} from 'react-firebase-hooks/firestore'
-
-type NewsType = {
-    id: string;
-    img: string;
-    title: string;
-    MaxText: string;
-    MinText: string;
-    createdAt: {
-        seconds: number;
-    } | null;
-    userId: string
-}
+import {QuickBytes} from './QuickBytes'
+import {useTheme} from '@mui/material'
+import {NewsAddMessagesType} from '../types/types'
+import {Preloader} from './common/Preloader'
 
 export function NewsPage() {
     const {auth} = useContext(Context)
     const [user] = useAuthState(auth)
-    const [news, setNews] = useState<NewsType[]>([])
+    const theme = useTheme()
+    const [news, setNews] = useState<NewsAddMessagesType[]>([])
 
     const [loading, setLoading] = useState<boolean>(true)
     const newsCollection = collection(getFirestore(), 'news')
@@ -49,15 +42,26 @@ export function NewsPage() {
     }, [newsSnapshot])
 
     return (
-        <Container style={{marginTop: '80px'}}>
-            <AddNewsForm/>
-            <Grid container spacing={1} sx={{direction: 'row', justifyContent: 'flex-start', alignItems: 'stretch'}}>
-                {news.reverse().map((e) => {
-                    return <Grid key={e.id} item xs={12} sm={6} md={3}>
-                        <CartNews img={e.img ? e.img : logoNoImg} title={e.title} text={e.MinText} id={e.id}/>
+        <div>
+            {loading ?
+                (<Preloader/>)
+                :
+                (<Container style={{marginTop: '80px'}}>
+                    <AddNewsForm/>
+                    <Grid container spacing={1}
+                          sx={{direction: 'row', justifyContent: 'flex-start', alignItems: 'stretch'}}>
+                        <Grid item xs={12} sm={6} md={3} style={{}}>
+                            <QuickBytes/>
+                        </Grid>
+                        {news.reverse().map((e) => {
+                            return <Grid key={e.id} item xs={12} sm={6} md={3}>
+                                <CartNews img={e.img ? e.img : logoNoImg} title={e.title} text={e.MinText}
+                                          id={e.id}/>
+                            </Grid>
+                        })}
                     </Grid>
-                })}
-            </Grid>
-        </Container>
+                </Container>)
+            }
+        </div>
     )
 }
