@@ -9,7 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import AddIcon from '@mui/icons-material/Add'
 import {addDoc, collection, getFirestore, serverTimestamp} from 'firebase/firestore'
-import {Context} from '../App'
+import {Context} from '../../App'
 import {useAuthState} from 'react-firebase-hooks/auth'
 import {getDownloadURL, getStorage, ref, uploadBytes} from 'firebase/storage'
 
