@@ -37,14 +37,11 @@ export function ProfilePage() {
                 createdAt: doc.data().createdAt
 
             }))
-            // console.log(queryqBPostsProfileSnapshot)
             setqBPostsUser(BPostProfile)
-            //setLoading(false)
         }
     }, [queryqBPostsProfileSnapshot])
 
     useEffect(() => {
-        console.log(params.userID)
         if (params.userID) {
             profileAPI.getProfile(params.userID).then(data => {
                 if (data) {

@@ -10,7 +10,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 import AddIcon from '@mui/icons-material/Add'
 import {addDoc, collection, getFirestore, serverTimestamp} from 'firebase/firestore'
 import {Context} from '../../App'
-import {useAuthState} from 'react-firebase-hooks/auth'
 import {getDownloadURL, getStorage, ref, uploadBytes} from 'firebase/storage'
 
 export function AddNewsForm() {
@@ -27,8 +26,7 @@ export function AddNewsForm() {
     const [valueTitle, setValueTitle] = useState('')
     const [valueMinText, setValueMinText] = useState('')
     const [valueMaxText, setValueMaxText] = useState('')
-    const {auth, firestore} = useContext(Context)
-    const [user] = useAuthState(auth)
+    const {user} = useContext(Context)
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
     const inputRef = React.useRef<HTMLInputElement>()
@@ -41,13 +39,13 @@ export function AddNewsForm() {
         inputRef.current?.focus()
     }
 
-    const keyEnterHandle = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    /*const keyEnterHandle = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault()
             sendNewsHandler()
         }
         return
-    }
+    }*/
 
     const PhotoSelected = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length) {

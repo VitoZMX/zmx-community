@@ -59,7 +59,8 @@ export function NewsMore() {
             }
             await getNewsById(newsId)
         }
-        refreshNews()
+        refreshNews().then(() => {
+        })
     }, [params.newsID])
 
     return (
@@ -84,7 +85,7 @@ export function NewsMore() {
                                 wordWrap: 'break-word'
                             }}>{news?.MaxText}</pre>
                         </h2>
-                        <img src={news?.img} style={{width: '100%'}}/>
+                        <img src={news?.img} alt={'newsImg'} style={{width: '100%'}}/>
                         <h5>Автор ID: {news.userId}</h5>
                     </div>
                 ) : (

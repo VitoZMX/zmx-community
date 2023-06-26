@@ -159,23 +159,23 @@ export function ProfileData({user, autor = false}: any) {
                         fontWeight: 350,
                         color: 'black'
                     }}>{user?.displayName}</Typography>
-                    <Box marginBottom={'8px'}>
+                    <Box marginBottom={'8px'} key={'user.email'}>
                         <Typography variant="h6">Email:</Typography>
                         <Typography variant="body1">{user?.email}</Typography>
                     </Box>
-                    <Box marginBottom={'8px'}>
+                    <Box marginBottom={'8px'} key={'user.age'}>
                         <Typography variant="h6">Возраст:</Typography>
                         <Typography variant="body1">{user?.age}</Typography>
                     </Box>
-                    <Box marginBottom={'8px'}>
+                    <Box marginBottom={'8px'} key={'user.sex'}>
                         <Typography variant="h6">Пол:</Typography>
                         <Typography variant="body1">{user?.sex}</Typography>
                     </Box>
-                    <Box marginBottom={'8px'}>
+                    <Box marginBottom={'8px'} key={'user.country'}>
                         <Typography variant="h6">Страна:</Typography>
                         <Typography variant="body1">{user?.country}</Typography>
                     </Box>
-                    <Box marginBottom={'8px'}>
+                    <Box marginBottom={'8px'} key={'user.aboutYou'}>
                         <Typography variant="h6">Обо мне:</Typography>
                         <Typography variant="body1">{user?.aboutYou}</Typography>
                     </Box>
@@ -209,7 +209,7 @@ export function ProfileData({user, autor = false}: any) {
                         времени!" arrow><HelpOutlineIcon/></Tooltip>
                     </div>
                     <div>
-                        {arr.map((post) => (
+                        {arr.map((post, index) => (
                             <div style={{
                                 background: 'rgba(25, 118, 210, 0.18)',
                                 display: 'flex',
@@ -219,7 +219,7 @@ export function ProfileData({user, autor = false}: any) {
                                 marginBottom: '4px',
                                 borderRadius: '4px',
                                 padding: '4px',
-                            }}>
+                            }} key={`qBPost_${index}`}>
                                 <Typography variant="body1">{post.text}</Typography>
                                 {autor && (
                                     <IconButton type="button" sx={{p: '10px'}} aria-label="delQBtext">

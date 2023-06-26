@@ -15,7 +15,6 @@ export const AllUsers: React.FC<allUsersPropsType> = ({allUsers}) => {
     const {user} = useContext(Context)
     const [page, setPage] = useState(1)
     const [pageSize, setPageSize] = useState(0)
-    const pageCount = Math.ceil(allUsers.length / pageSize)
 
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value)
@@ -24,6 +23,8 @@ export const AllUsers: React.FC<allUsersPropsType> = ({allUsers}) => {
     useEffect(() => {
         setPageSize(5)
     }, [])
+
+    const pageCount = pageSize > 0 ? Math.ceil(allUsers.length / pageSize) : 0
 
     return (
         <Grid container spacing={1} sx={{direction: 'row', justifyContent: 'flex-start', alignItems: 'stretch'}}>

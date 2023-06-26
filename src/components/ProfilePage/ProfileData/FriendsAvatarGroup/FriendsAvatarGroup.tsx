@@ -39,7 +39,8 @@ export const FriendsAvatarGroup: React.FC<FriendsAvatarGroupPropsType> = ({frien
             }}
             onClick={handleClickToUsersPage}>
             <AvatarGroup max={countRenderAvatarFriends + 1} total={friends.length || 0}>
-                {groupFriends.map((profile) => <Avatar alt={profile.displayName} src={profile.photoURL || ''}/>)}
+                {groupFriends.map((profile) => <Avatar key={`AvatarGroup_${profile.uid}`} alt={profile.displayName}
+                                                       src={profile.photoURL || ''}/>)}
             </AvatarGroup>
         </Button>
     )

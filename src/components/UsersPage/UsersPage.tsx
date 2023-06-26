@@ -19,8 +19,6 @@ export const UsersPage: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true)
     const [value, setValue] = React.useState(0)
     const location = useLocation()
-    const {myProp} = location.state || {}
-    console.log(location.state)
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue)

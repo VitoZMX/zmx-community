@@ -76,12 +76,10 @@ export type quickBytesType = {
     speak: string
 }
 
-export type FriendsUserType = {
-    friendId: string
-}
-
 export type FriendsTabPanelPropsType = {
     children?: React.ReactNode;
     index: number;
     value: number;
 }
+
+export type AllQuickBytesType = quickBytesType & userType
