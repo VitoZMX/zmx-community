@@ -1,17 +1,13 @@
-import React, {useContext} from 'react'
-import {Context} from '../App'
-import {useAuthState} from 'react-firebase-hooks/auth'
+import React from 'react'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import {CardActionArea, useTheme} from '@mui/material'
 import {NavLink} from 'react-router-dom'
-import { CartNewsPropsType } from '../types/types'
+import {CartNewsPropsType} from '../../../types/types'
 
 export function CartNews({img, title, text, id}: CartNewsPropsType) {
-    const {auth} = useContext(Context)
-    const {user} = useContext(Context)
     const theme = useTheme()
 
     return (

@@ -8,9 +8,9 @@ import ListItemText from '@mui/material/ListItemText'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
-import {profileAPI} from '../api/profile-api'
+import {profileAPI} from '../../../api/profile-api'
 import Card from '@mui/material/Card'
-import {quickBytesType, userType} from '../types/types'
+import {quickBytesType, userType} from '../../../types/types'
 
 type AllQuickBytesType = quickBytesType & userType
 
@@ -45,7 +45,7 @@ export const QuickBytes: React.FC = () => {
         }
     }, [quickBytesSnapshot])
 
-    console.log('Render qB messanges')
+    console.log('Render qB messages')
 
     return (
         <Card sx={{height: '100%'}}>

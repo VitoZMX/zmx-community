@@ -3,10 +3,10 @@ import {Container} from '@material-ui/core'
 import Grid from '@mui/material/Grid'
 import {useNavigate, useParams} from 'react-router-dom'
 import {collection, doc, getDoc, getFirestore} from 'firebase/firestore'
-import {Preloader} from './common/Preloader'
+import {Preloader} from '../../common/Preloader'
 import Button from '@mui/material/Button'
 import ReplyIcon from '@mui/icons-material/Reply'
-import {Context} from '../App'
+import {Context} from '../../../App'
 import {useAuthState} from 'react-firebase-hooks/auth'
 
 export type PathParamsType = {
