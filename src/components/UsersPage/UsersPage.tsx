@@ -11,16 +11,28 @@ import {AllUsers} from './AllUsers/AllUsers'
 import {UserFriend} from './UserFriends/UserFriend'
 import {accessibilityProps, TabPanel} from './TabPanel & accessibilityProps/TabPanel & accessibilityProps'
 import {Preloader} from '../common/Preloader'
+import {useLocation} from 'react-router-dom'
 
 export const UsersPage: React.FC = () => {
     const {user, setUserFriends} = useContext(Context)
     const [allUsers, setAllUsers] = useState<userType[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [value, setValue] = React.useState(0)
+    const location = useLocation()
+    const {myProp} = location.state || {}
+    console.log(location.state)
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue)
     }
+
+    useEffect(() => {
+        if (location.state > 0) {
+            setValue(location.state)
+        } else {
+            setValue(0)
+        }
+    }, [location.state])
 
     useEffect(() => {
         if (!user) {

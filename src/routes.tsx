@@ -4,6 +4,7 @@ import {
     LOGIN_ROUTE,
     MORE_NEWS_ROUTE,
     NEWS_ROUTE,
+    PROFILE_ID_ROUTE,
     PROFILE_ROUTE,
     SETTING_ROUTE,
     TODO_ROUTE,
@@ -11,7 +12,7 @@ import {
 } from './utils/constRoute'
 import {Login} from './components/Login'
 import {Chat} from './components/Chat'
-import {Profile} from './components/Profile'
+import {ProfilePage} from './components/ProfilePage/ProfilePage'
 import {NewsPage} from './components/NewsPage'
 import {ToDoList} from './components/ToDoList'
 import {NewsMore} from './components/NewsMore'
@@ -29,8 +30,8 @@ export const publicRoutes = [
         Component: Login
     },
     {
-        path: PROFILE_ROUTE,
-        Component: Profile
+        path: PROFILE_ID_ROUTE,
+        Component: ProfilePage
     },
     {
         path: MORE_NEWS_ROUTE,
@@ -44,8 +45,12 @@ export const privateRoutes = [
         Component: HomePage
     },
     {
+        path: PROFILE_ID_ROUTE,
+        Component: ProfilePage
+    },
+    {
         path: PROFILE_ROUTE,
-        Component: Profile
+        Component: ProfilePage
     },
     {
         path: USERS_ROUTE,

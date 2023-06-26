@@ -20,6 +20,7 @@ export const AllUsers: React.FC<allUsersPropsType> = ({allUsers}) => {
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value)
     }
+
     useEffect(() => {
         setPageSize(5)
     }, [])
@@ -31,6 +32,7 @@ export const AllUsers: React.FC<allUsersPropsType> = ({allUsers}) => {
             </Box>
             {allUsers.slice((page - 1) * pageSize, page * pageSize).map((profile) => (
                 profile.uid === user?.uid ? null : (
+
                     <Grid item xs={6} sm={4} md={2} key={profile.uid}>
                         <UserCard profile={profile}/>
                     </Grid>
