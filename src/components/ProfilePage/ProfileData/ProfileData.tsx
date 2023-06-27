@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {Box, Tooltip} from '@material-ui/core'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
@@ -9,101 +9,81 @@ import imgF from '../../../assets/image/logoNoImg.png'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
-import {addDoc, collection, doc, getFirestore, orderBy, query, serverTimestamp} from 'firebase/firestore'
-import {useCollection} from 'react-firebase-hooks/firestore'
+import {serverTimestamp} from 'firebase/firestore'
 import {FormControl, InputLabel, MenuItem} from '@mui/material'
 import Select from '@mui/material/Select'
 import {quickBytesType} from '../../../types/types'
-import {Preloader} from '../../common/Preloader'
 import {FriendsAvatarGroup} from './FriendsAvatarGroup/FriendsAvatarGroup'
+import {profileAPI} from '../../../api/profile-api'
+import {quickBytesAPI} from '../../../api/quickBytes-api'
+import {Context, FirebaseUserAndUserType} from '../../../App'
 
-export type PathParamsType = {
-    userID?: string
-}
-
-export function ProfileData({user, autor = false}: any) {
+export function ProfileData({profile, author = false}: any) {
+    const {user, setUser} = useContext(Context)
     const [value, setValue] = useState('')
     const [valueSpeaks, setValueSpeaks] = useState('Говорит')
     const [qBPostsUser, setqBPostsUser] = useState<quickBytesType[]>([])
     const inputRef = React.useRef<HTMLInputElement>()
-    const qBPostsCollection = collection(getFirestore(), 'qBPosts')
-    const qBPostsCollectionProfile = collection(getFirestore(), 'quickBytesIdCollection')
-    const queryqBPostsProfile = query(qBPostsCollectionProfile, orderBy('createdAt'))
-    const [queryqBPostsProfileSnapshot, error] = useCollection(queryqBPostsProfile)
 
-    let arr = [
-        {
-            uid: 'id_123',
-            idQB: 'idQB',
-            text: '123',
-            createData: '123'
-        },
-        {
-            uid: 'id_123',
-            idQB: 'idQB',
-            text: 'Много длинных букв в тексте! Много длинных букв в тексте! Много длинных букв в тексте! Много длинных букв в тексте! Много длинных букв в тексте! ',
-            createData: '123'
-        },
-        {
-            uid: 'id_123',
-            idQB: 'idQB',
-            text: '123',
-            createData: '123'
-        },
-        {
-            uid: 'id_123',
-            idQB: 'idQB',
-            text: '123',
-            createData: '123'
-        },
-    ]
-
-    const ClearqBTextHandle = () => {
+    const ClearQBTextHandle = () => {
         setValue('')
         inputRef.current?.focus()
+    }
+
+    const delQBPostHandler = async (idPost: string) => {
+        if (!user) return
+
+        profileAPI.delQBPost(idPost, user.uid).then((data) => {
+                setUser({...user, qBPostsId: data.qBPostsId || []} as FirebaseUserAndUserType)
+                console.log('Del qB Post successfully!')
+            }
+        ).then(() => quickBytesAPI.delQuickBytes(idPost))
     }
 
     const keyEnterHandle = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault()
-            sendqBTextHandler()
+            sendQBTextHandler()
         }
         return
     }
 
-    const sendqBTextHandler = async () => {
+    const sendQBTextHandler = async () => {
         if (!user) return
 
         if (!value.trim()) {
-            ClearqBTextHandle()
+            ClearQBTextHandle()
             return
         }
 
-        if (user) {
-            const qBData = {
-                text: value,
-                userId: user.uid,
-                speak: valueSpeaks,
-                createdAt: serverTimestamp(),
-            }
-            try {
-                const newquickBytesRef = await addDoc(qBPostsCollection, qBData)
-                const quickBytesId = newquickBytesRef.id
-                const userDocRef = doc(getFirestore(), 'users', user.uid)
-                await addDoc(collection(userDocRef, 'quickBytesIdCollection'), {quickBytesId})
-                console.log('qB Post successfully!')
-
-                setValue('')
-                ClearqBTextHandle()
-            } catch (error) {
-                console.error('Error adding document: ', error)
-            }
+        const qBData = {
+            text: value,
+            userId: user.uid,
+            speak: valueSpeaks,
+            createdAt: serverTimestamp(),
         }
+
+        quickBytesAPI.addQuickBytes(qBData).then(postId => {
+            profileAPI.addQBPost(postId, user.uid).then((data) => {
+                console.log('Add qB Post successfully!')
+                setUser({...user, qBPostsId: data.qBPostsId || []} as FirebaseUserAndUserType)
+                setValue('')
+                ClearQBTextHandle()
+            })
+        })
     }
 
-    if (!user) {
-        return <Preloader/>
-    }
+    useEffect(() => {
+        if (profile.qBPostsId && profile.qBPostsId.length > 0) {
+            quickBytesAPI.getQuickBytesByIds(profile.qBPostsId)
+                .then((PostsUser) => {
+                    PostsUser.sort((a, b) => a.createdAt.seconds - b.createdAt.seconds)
+                    setqBPostsUser(PostsUser.slice(-7))
+                })
+        } else {
+            setqBPostsUser([])
+        }
+    }, [profile.qBPostsId])
 
     return (
         <Grid container spacing={1} alignItems="stretch">
@@ -120,26 +100,26 @@ export function ProfileData({user, autor = false}: any) {
                             maxHeight: '400px', borderRadius: '12px  12px 0 0 '
                         }}
                         component="img"
-                        image={user?.photoURL || imgF}
+                        image={profile?.photoURL || imgF}
                         alt="Your avatar"
                     />
                     <div style={{padding: '10px'}}>
-                        <Typography variant="body1">Роль: {user?.role}</Typography>
+                        <Typography variant="body1">Роль: {profile?.role}</Typography>
                         <Typography style={{}}
-                                    variant="body1">Друзей: {user.friends?.length || '0'}</Typography>
-                        <FriendsAvatarGroup autor={autor} friends={user.friends}/>
+                                    variant="body1">Друзей: {profile.friends?.length || '0'}</Typography>
+                        <FriendsAvatarGroup author={author} friends={profile.friends}/>
                         <Typography variant="subtitle2" sx={{
                             mr: 2,
                             fontFamily: 'Roboto',
                             fontWeight: 100,
                             color: 'white'
-                        }}>Account created: {user?.metadata?.creationTime}</Typography>
+                        }}>Account created: {profile?.metadata?.creationTime}</Typography>
                         <Typography variant="subtitle2" sx={{
                             mr: 2,
                             fontFamily: 'Roboto',
                             fontWeight: 100,
                             color: 'white'
-                        }}>ID: {user?.uid}</Typography>
+                        }}>ID: {profile?.uid}</Typography>
                     </div>
                 </div>
             </Grid>
@@ -158,26 +138,26 @@ export function ProfileData({user, autor = false}: any) {
                         fontFamily: 'Roboto',
                         fontWeight: 350,
                         color: 'black'
-                    }}>{user?.displayName}</Typography>
+                    }}>{profile?.displayName}</Typography>
                     <Box marginBottom={'8px'} key={'user.email'}>
                         <Typography variant="h6">Email:</Typography>
-                        <Typography variant="body1">{user?.email}</Typography>
+                        <Typography variant="body1">{profile?.email}</Typography>
                     </Box>
                     <Box marginBottom={'8px'} key={'user.age'}>
                         <Typography variant="h6">Возраст:</Typography>
-                        <Typography variant="body1">{user?.age}</Typography>
+                        <Typography variant="body1">{profile?.age}</Typography>
                     </Box>
                     <Box marginBottom={'8px'} key={'user.sex'}>
                         <Typography variant="h6">Пол:</Typography>
-                        <Typography variant="body1">{user?.sex}</Typography>
+                        <Typography variant="body1">{profile?.sex}</Typography>
                     </Box>
                     <Box marginBottom={'8px'} key={'user.country'}>
                         <Typography variant="h6">Страна:</Typography>
-                        <Typography variant="body1">{user?.country}</Typography>
+                        <Typography variant="body1">{profile?.country}</Typography>
                     </Box>
                     <Box marginBottom={'8px'} key={'user.aboutYou'}>
                         <Typography variant="h6">Обо мне:</Typography>
-                        <Typography variant="body1">{user?.aboutYou}</Typography>
+                        <Typography variant="body1">{profile?.aboutYou}</Typography>
                     </Box>
                 </div>
             </Grid>
@@ -209,7 +189,9 @@ export function ProfileData({user, autor = false}: any) {
                         времени!" arrow><HelpOutlineIcon/></Tooltip>
                     </div>
                     <div>
-                        {arr.map((post, index) => (
+                        {qBPostsUser.length === 0 &&
+                            <Typography variant="body1">Добавь свой первый qB post!</Typography>}
+                        {qBPostsUser.map((post, index) => (
                             <div style={{
                                 background: 'rgba(25, 118, 210, 0.18)',
                                 display: 'flex',
@@ -221,8 +203,12 @@ export function ProfileData({user, autor = false}: any) {
                                 padding: '4px',
                             }} key={`qBPost_${index}`}>
                                 <Typography variant="body1">{post.text}</Typography>
-                                {autor && (
-                                    <IconButton type="button" sx={{p: '10px'}} aria-label="delQBtext">
+                                {author && (
+                                    <IconButton
+                                        onClick={() => {
+                                            delQBPostHandler(post.id)
+                                        }}
+                                        type="button" sx={{p: '10px'}} aria-label="delQBtext">
                                         <DeleteForeverIcon/>
                                     </IconButton>
                                 )}
@@ -230,7 +216,7 @@ export function ProfileData({user, autor = false}: any) {
                         ))
                         }
                     </div>
-                    {autor && (
+                    {author && (
                         <div style={{width: '100%'}}>
                             <TextField
                                 fullWidth
@@ -243,9 +229,9 @@ export function ProfileData({user, autor = false}: any) {
                                 onKeyDown={keyEnterHandle}/>
                             <div style={{display: 'flex', alignItems: 'center', marginTop: '4px'}}>
                                 <Button style={{marginRight: '4px', height: '40px'}} disabled={!value.length}
-                                        onClick={ClearqBTextHandle}
+                                        onClick={ClearQBTextHandle}
                                         variant={'outlined'}>Clear</Button>
-                                <Button style={{marginRight: '4px', height: '40px'}} onClick={sendqBTextHandler}
+                                <Button style={{marginRight: '4px', height: '40px'}} onClick={sendQBTextHandler}
                                         variant={'outlined'}>Send</Button>
                                 <FormControl sx={{m: 1, width: '100%'}} size="small">
                                     <InputLabel id="demo-simple-select-speaks">How to say</InputLabel>

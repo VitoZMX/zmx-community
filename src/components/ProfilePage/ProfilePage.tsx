@@ -55,33 +55,6 @@ export function ProfilePage() {
         }
     }, [params.userID])
 
-    let arr = [
-        {
-            uid: 'id_123',
-            idQB: 'idQB',
-            text: '123',
-            createData: '123'
-        },
-        {
-            uid: 'id_123',
-            idQB: 'idQB',
-            text: 'Много длинных букв в тексте! Много длинных букв в тексте! Много длинных букв в тексте! Много длинных букв в тексте! Много длинных букв в тексте! ',
-            createData: '123'
-        },
-        {
-            uid: 'id_123',
-            idQB: 'idQB',
-            text: '123',
-            createData: '123'
-        },
-        {
-            uid: 'id_123',
-            idQB: 'idQB',
-            text: '123',
-            createData: '123'
-        },
-    ]
-
     const ClearqBTextHandle = () => {
         setValue('')
         inputRef.current?.focus()
@@ -131,7 +104,8 @@ export function ProfilePage() {
 
     return (
         <Container style={{marginTop: '80px', marginBottom: '80px'}}>
-            {params.userID && profile ? (<ProfileData user={profile}/>) : (<ProfileData user={user} autor={true}/>)}
+            {params.userID && profile ? (<ProfileData profile={profile}/>) : (
+                <ProfileData profile={user} author={true}/>)}
         </Container>
     )
 }
