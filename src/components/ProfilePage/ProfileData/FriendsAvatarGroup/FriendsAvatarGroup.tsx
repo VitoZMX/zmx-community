@@ -8,10 +8,10 @@ import {useNavigate} from 'react-router-dom'
 
 type FriendsAvatarGroupPropsType = {
     friends: string[],
-    autor: boolean
+    author: boolean
 }
 
-export const FriendsAvatarGroup: React.FC<FriendsAvatarGroupPropsType> = ({friends, autor}) => {
+export const FriendsAvatarGroup: React.FC<FriendsAvatarGroupPropsType> = ({friends, author}) => {
     const [groupFriends, setGroupFriends] = useState<userType[]>([])
     const countRenderAvatarFriends = 5
     const navigate = useNavigate()
@@ -22,7 +22,7 @@ export const FriendsAvatarGroup: React.FC<FriendsAvatarGroupPropsType> = ({frien
     }, [friends])
 
     const handleClickToUsersPage = () => {
-        if (!autor) return
+        if (!author) return
         navigate('/users', {state: 1})
     }
 
@@ -39,7 +39,8 @@ export const FriendsAvatarGroup: React.FC<FriendsAvatarGroupPropsType> = ({frien
             }}
             onClick={handleClickToUsersPage}>
             <AvatarGroup max={countRenderAvatarFriends + 1} total={friends.length || 0}>
-                {groupFriends.map((profile) => <Avatar key={`AvatarGroup_${profile.uid}`} alt={profile.displayName}
+                {groupFriends.map((profile) => <Avatar key={`AvatarGroup_${profile.uid}`}
+                                                       alt={profile.displayName}
                                                        src={profile.photoURL || ''}/>)}
             </AvatarGroup>
         </Button>

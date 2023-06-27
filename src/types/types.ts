@@ -28,6 +28,7 @@ export type userType = {
         lastSignInTime?: string
     }
     friends: string[]
+    qBPostsId?: string[]
 }
 
 export type NewsAddMessagesType = {
@@ -70,7 +71,9 @@ export type ChatMessageType = {
 
 export type quickBytesType = {
     id: string
-    createdAt: string
+    createdAt: {
+        seconds: number
+    }
     text: string
     userId: string
     speak: string

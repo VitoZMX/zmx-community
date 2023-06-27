@@ -18,7 +18,7 @@ export function NewsPage() {
     const [quickBytesAndAuthorData, setQuickBytesAndAuthorData] = useState<AllQuickBytesType[]>([])
 
     useEffect(() => {
-        quickBytesAPI.getQuickBytes().then(data => setQuickBytes(data))
+        quickBytesAPI.getAllQuickBytes().then(data => setQuickBytes(data))
     }, [])
 
     useEffect(() => {

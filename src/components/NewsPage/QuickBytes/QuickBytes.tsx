@@ -23,7 +23,8 @@ export const QuickBytes: React.FC<QuickBytesPropsType> = ({qBytesData}) => {
                     <div key={post.id}>
                         <ListItem alignItems="flex-start">
                             <ListItemAvatar>
-                                <Avatar alt={`avatarUserId_${post.userId}`}
+                                <Avatar sx={{width: 45, height: 45}}
+                                        alt={`avatarUserId_${post.userId}`}
                                         src={post?.photoURL || ''}/>
                             </ListItemAvatar>
                             <ListItemText

@@ -76,7 +76,8 @@ export function App() {
                             barkMode: false,
                             photoURL: user.photoURL,
                             role: 'User',
-                            friends: []
+                            friends: [],
+                            qBPostsId: []
                         }
                         const userDocRef = doc(getFirestore(), 'users', user.uid)
                         await setDoc(userDocRef, newUserData)
