@@ -15,7 +15,7 @@ import {quickBytesType} from '../types/types'
 export const quickBytesAPI = {
     async getAllQuickBytes() {
         const quickBytesCollection = collection(getFirestore(), 'qBPosts')
-        const q = query(quickBytesCollection, orderBy('createdAt', 'desc'), limit(6))
+        const q = query(quickBytesCollection, orderBy('createdAt', 'desc'), limit(5))
         const querySnapshot = await getDocs(q)
         return querySnapshot.docs.map((doc) => ({
             id: doc.id,
