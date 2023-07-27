@@ -12,7 +12,7 @@ import {NavLink, useNavigate} from 'react-router-dom'
 import {LOGIN_ROUTE} from '../utils/constRoute'
 import {useAuthState} from 'react-firebase-hooks/auth'
 import Avatar from '@mui/material/Avatar'
-import {IconButton, Menu, MenuItem, Tooltip} from '@mui/material'
+import {IconButton, Menu, MenuItem} from '@mui/material'
 import PersonIcon from '@mui/icons-material/Person'
 import SettingsIcon from '@mui/icons-material/Settings'
 import PeopleIcon from '@mui/icons-material/People'
@@ -127,28 +127,26 @@ export function Navbar() {
                                     ('')
                                     : user ? (
                                             <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                                <Tooltip title="Menu">
-                                                    <IconButton onClick={handleOpenUserMenu}
-                                                                sx={{
-                                                                    p: 0,
-                                                                    padding: '0 0 0 16px',
-                                                                    borderRadius: '10px 20px 20px 10px'
-                                                                }}>
-                                                        <Typography variant="body1" sx={{
-                                                            color: 'white',
-                                                            mr: 2,
-                                                            textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
-                                                            fontFamily: 'Roboto',
-                                                            fontWeight: 400,
-                                                        }}>
-                                                            {getFirstNameUser(user.displayName)}
-                                                        </Typography>
-                                                        <Avatar alt={user.displayName || 'ProfileAvatar'}
-                                                                src={user.photoURL || undefined}
-                                                                sx={{bgcolor: '#53b227'}}
-                                                        />
-                                                    </IconButton>
-                                                </Tooltip>
+                                                <IconButton onClick={handleOpenUserMenu}
+                                                            sx={{
+                                                                p: 0,
+                                                                padding: '0 0 0 16px',
+                                                                borderRadius: '10px 20px 20px 10px'
+                                                            }}>
+                                                    <Typography variant="body1" sx={{
+                                                        color: 'white',
+                                                        mr: 2,
+                                                        textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
+                                                        fontFamily: 'Roboto',
+                                                        fontWeight: 400,
+                                                    }}>
+                                                        {getFirstNameUser(user.displayName)}
+                                                    </Typography>
+                                                    <Avatar alt={user.displayName || 'ProfileAvatar'}
+                                                            src={user.photoURL || undefined}
+                                                            sx={{bgcolor: '#53b227'}}
+                                                    />
+                                                </IconButton>
                                                 <Menu
                                                     sx={{mt: '40px'}}
                                                     id="menu-appbar"
