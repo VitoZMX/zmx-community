@@ -184,9 +184,9 @@ export function ProfileData({profile, author = false}: any) {
                     <div style={{display: 'flex', alignItems: 'center'}}>
                         <Typography marginRight={'4px'} variant="h6">quickBytes</Typography>
                         <Tooltip title="QuickBytes - блок быстрых новостей и мыслей, где пользователи могут
-                        делиться своими мыслями и идеями в ограниченном формате. Следите за последними новостями и
-                        трендами, получайте мгновенную обратную связь и оставайтесь в курсе событий в режиме реального
-                        времени!" arrow><HelpOutlineIcon/></Tooltip>
+                        делиться своими мыслями и идеями в ограниченном формате (Максимум 200 символов).
+                        Следите за последними новостями и трендами, получайте мгновенную обратную связь
+                        и оставайтесь в курсе событий в режиме реального времени!" arrow><HelpOutlineIcon/></Tooltip>
                     </div>
                     <div>
                         {qBPostsUser.length === 0 &&
@@ -217,7 +217,7 @@ export function ProfileData({profile, author = false}: any) {
                         }
                     </div>
                     {author && (
-                        <div style={{width: '100%'}}>
+                        <div style={{width: '100%', marginTop: '15px'}}>
                             <TextField
                                 fullWidth
                                 multiline
@@ -225,6 +225,8 @@ export function ProfileData({profile, author = false}: any) {
                                 variant={'outlined'}
                                 value={value}
                                 inputRef={inputRef}
+                                inputProps={{maxLength: 200}}
+                                label="Напиши свой qB"
                                 onChange={e => setValue(e.target.value)}
                                 onKeyDown={keyEnterHandle}/>
                             <div style={{display: 'flex', alignItems: 'center', marginTop: '4px'}}>
