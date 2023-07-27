@@ -60,7 +60,7 @@ export function NewsPage() {
                         <Grid item xs={12} sm={6} md={3} style={{}}>
                             <QuickBytes qBytesData={quickBytesAndAuthorData}/>
                         </Grid>
-                        {news.reverse().map((e) => {
+                        {news.map((e) => {
                             return <Grid key={e.id} item xs={12} sm={6} md={3}>
                                 <CartNews img={e.img ? e.img : logoNoImg} title={e.title} text={e.MinText}
                                           id={e.id}/>

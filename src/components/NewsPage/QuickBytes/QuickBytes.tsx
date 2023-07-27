@@ -19,7 +19,7 @@ export const QuickBytes: React.FC<QuickBytesPropsType> = ({qBytesData}) => {
     return (
         <Card sx={{height: '100%'}}>
             <List>
-                {qBytesData.reverse().map((post, index) => (
+                {qBytesData.map((post, index) => (
                     <div key={post.id}>
                         <ListItem alignItems="flex-start">
                             <ListItemAvatar>
