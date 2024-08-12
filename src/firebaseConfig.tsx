@@ -1,9 +1,9 @@
 export const firebaseConfig = {
-    apiKey: 'AIzaSyCK1X-4ggloNpwbTbPIndcOQcSQWK6Jw1I',
-    authDomain: 'zmx-chat.firebaseapp.com',
-    projectId: 'zmx-chat',
-    storageBucket: 'zmx-chat.appspot.com',
-    messagingSenderId: '678272987448',
-    appId: '1:678272987448:web:ce28ca7c4bbfb7e992d1cd',
-    measurementId: 'G-SHGJGCMPFK'
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID,
+    measurementId: process.env.FIREBASE_MEASUREMENT_ID
 }
