@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {Container} from '@material-ui/core'
 import {Context} from '../../App'
 import {usersAPI} from '../../api/users-api'
 import {userType} from '../../types/types'
@@ -12,6 +11,7 @@ import {UserFriend} from './UserFriends/UserFriend'
 import {accessibilityProps, TabPanel} from './TabPanel & accessibilityProps/TabPanel & accessibilityProps'
 import {Preloader} from '../common/Preloader'
 import {useLocation} from 'react-router-dom'
+import Container from "@mui/material/Container";
 
 export const UsersPage: React.FC = () => {
     const {user, setUserFriends} = useContext(Context)

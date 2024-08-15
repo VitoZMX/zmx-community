@@ -1,18 +1,16 @@
-import React, {useContext, useEffect, useState} from 'react'
-import logo from '../assets/image/logozmx.svg'
+import React, { useContext, useEffect, useState } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
-import {ButtonBase, Grid} from '@material-ui/core'
-import {createTheme, ThemeProvider} from '@mui/material/styles'
-import {NavLink, useNavigate} from 'react-router-dom'
-import {LOGIN_ROUTE} from '../utils/constRoute'
-import {useAuthState} from 'react-firebase-hooks/auth'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { LOGIN_ROUTE } from '../utils/constRoute'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import Avatar from '@mui/material/Avatar'
-import {IconButton, Menu, MenuItem} from '@mui/material'
+import { ButtonBase, IconButton, Menu, MenuItem } from '@mui/material'
 import PersonIcon from '@mui/icons-material/Person'
 import SettingsIcon from '@mui/icons-material/Settings'
 import PeopleIcon from '@mui/icons-material/People'
@@ -20,7 +18,9 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import NewspaperIcon from '@mui/icons-material/Newspaper'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import ChatIcon from '@mui/icons-material/Chat'
-import {Context} from '../App'
+import { Context } from '../App'
+import Grid from "@mui/material/Grid";
+import logo from '../assets/image/logozmx.svg'
 
 const theme = createTheme({
     palette: {
@@ -61,8 +61,7 @@ export function Navbar() {
             return
         }
         const words = str.split(' ')
-        const nameUser = words[0].charAt(0).toUpperCase() + words[0].slice(1)
-        return nameUser
+      return words[0].charAt(0).toUpperCase() + words[0].slice(1)
     }
 
     const settings = [
@@ -77,7 +76,7 @@ export function Navbar() {
 
     useEffect(() => {
         setLoading(true)
-        if (loadingUser === false) {
+        if (!loadingUser) {
             setLoading(false)
         }
     }, [loadingUser])
@@ -85,7 +84,7 @@ export function Navbar() {
     return (
         <AppBar position="fixed" style={{backgroundColor: 'rgba(25, 118, 210, 0.8)', backdropFilter: 'blur(2px)'}}>
             <Container maxWidth="xl">
-                <Toolbar disableGutters variant={'dense'}>
+                <Toolbar disableGutters variant='dense'>
                     <Avatar src={logo} alt="logoNavBar" variant="square"
                             sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
                     <Typography
@@ -183,7 +182,7 @@ export function Navbar() {
                                         :
                                         (
                                             <NavLink to={LOGIN_ROUTE}>
-                                                <Button variant={'outlined'}>Login</Button>
+                                                <Button variant='outlined'>Login</Button>
                                             </NavLink>
                                         )
                                 }

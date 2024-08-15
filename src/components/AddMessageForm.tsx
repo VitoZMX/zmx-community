@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
-import {Button} from '@material-ui/core'
+import React, { useRef, useState } from 'react'
 import TextField from '@mui/material/TextField'
 import {addDoc, collection, getFirestore, serverTimestamp} from 'firebase/firestore'
+import Button from "@mui/material/Button";
 
 export function AddMessageForm({user}: any) {
     const [value, setValue] = useState('')
@@ -55,13 +55,13 @@ export function AddMessageForm({user}: any) {
                 fullWidth
                 multiline
                 maxRows={4}
-                variant={'outlined'}
+                variant='outlined'
                 value={value}
                 inputRef={inputRef}
                 onChange={e => setValue(e.target.value)}
                 onKeyDown={keyEnterHandle}/>
-            <Button onClick={sendMessageHandler} variant={'outlined'}>Send</Button>
-            <Button disabled={!value.length} onClick={ClearMessageHandle} variant={'outlined'}>Clear</Button>
+            <Button onClick={sendMessageHandler} variant='outlined'>Send</Button>
+            <Button disabled={!value.length} onClick={ClearMessageHandle} variant='outlined'>Clear</Button>
         </div>
     )
 }

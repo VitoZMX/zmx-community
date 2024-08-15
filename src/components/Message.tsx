@@ -1,7 +1,7 @@
 import React from 'react'
-import {Grid} from '@material-ui/core'
 import {Avatar} from '@mui/material'
 import {MessageTypeProps} from '../types/types'
+import Grid from "@mui/material/Grid";
 
 export const Message: React.FC<MessageTypeProps> = React.memo((props) => {
 

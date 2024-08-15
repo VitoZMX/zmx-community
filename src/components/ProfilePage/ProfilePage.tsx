@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {Container} from '@material-ui/core'
 import {Context} from '../../App'
 import {addDoc, collection, doc, getFirestore, orderBy, query, serverTimestamp} from 'firebase/firestore'
 import {useCollection} from 'react-firebase-hooks/firestore'
@@ -8,6 +7,7 @@ import {useParams} from 'react-router-dom'
 import {profileAPI} from '../../api/profile-api'
 import {ProfileData} from './ProfileData/ProfileData'
 import {Preloader} from '../common/Preloader'
+import Container from "@mui/material/Container";
 
 export type PathParamsType = {
     userID?: string

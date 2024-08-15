@@ -1,10 +1,13 @@
-import {Button, Container, Grid, Typography} from '@material-ui/core'
-import {makeStyles} from '@material-ui/core/styles'
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import {getDownloadURL, getStorage, listAll, ref} from 'firebase/storage'
 import {useEffect, useState} from 'react'
 import Box from '@mui/material/Box'
+import { makeStyles } from '@mui/styles';
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
 type ImageData = {
     img: string;
@@ -12,22 +15,22 @@ type ImageData = {
     cols: number;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
     discordWidget: {
         border: 'none',
         width: '100%',
         height: '500px',
-        marginBottom: theme.spacing(2),
+        marginBottom: '2',
     },
     socialButton: {
-        margin: theme.spacing(1),
+        marginRight: '12px',
     },
     galleryImage: {
         width: '100%',
         height: 'auto',
-        marginBottom: theme.spacing(2),
+        marginBottom: '2',
     },
-}))
+});
 
 function srcset(image: string, size: number, rows = 1, cols = 1) {
     return {
@@ -141,7 +144,6 @@ export function HomePage() {
                                 </ImageListItem>
                             ))}
                         </ImageList>
-
                     </Box>
                 </Grid>
             </Grid>

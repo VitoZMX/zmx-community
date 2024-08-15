@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import {Container} from '@material-ui/core'
 import Grid from '@mui/material/Grid'
 import {CartNews} from './CartNews/CartNews'
 import {AddNewsForm} from './AddNewsForm'
@@ -10,6 +9,7 @@ import {Preloader} from '../common/Preloader'
 import {quickBytesAPI} from '../../api/quickBytes-api'
 import {profileAPI} from '../../api/profile-api'
 import {newsAPI} from '../../api/news-api'
+import Container from "@mui/material/Container";
 
 export function NewsPage() {
     const [news, setNews] = useState<NewsAddMessagesType[]>([])

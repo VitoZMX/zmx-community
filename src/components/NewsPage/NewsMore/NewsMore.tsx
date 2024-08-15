@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {Container} from '@material-ui/core'
 import Grid from '@mui/material/Grid'
 import {useNavigate, useParams} from 'react-router-dom'
 import {collection, doc, getDoc, getFirestore} from 'firebase/firestore'
@@ -8,6 +7,7 @@ import Button from '@mui/material/Button'
 import ReplyIcon from '@mui/icons-material/Reply'
 import {Context} from '../../../App'
 import {useAuthState} from 'react-firebase-hooks/auth'
+import Container from "@mui/material/Container";
 
 export type PathParamsType = {
     newsID?: string
