@@ -14,7 +14,7 @@ import {Login} from './components/Login'
 import {Chat} from './components/Chat'
 import {ProfilePage} from './components/ProfilePage/ProfilePage'
 import {NewsPage} from './components/NewsPage/NewsPage'
-import {ToDoList} from './components/ToDoList'
+import {ToDoListPage} from './components/ToDoListPage/ToDoListPage'
 import {NewsMore} from './components/NewsPage/NewsMore/NewsMore'
 import {SettingPage} from './components/SettingPage'
 import {HomePage} from './components/HomePage'
@@ -62,7 +62,7 @@ export const privateRoutes = [
     },
     {
         path: TODO_ROUTE,
-        Component: ToDoList
+        Component: ToDoListPage
     },
     {
         path: NEWS_ROUTE,
