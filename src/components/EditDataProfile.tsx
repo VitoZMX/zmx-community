@@ -5,7 +5,7 @@ import CancelIcon from '@mui/icons-material/Cancel'
 import Button from '@mui/material/Button'
 import EditIcon from '@mui/icons-material/Edit'
 import Switch from '@mui/material/Switch'
-import {collection, doc, getDoc, getFirestore, setDoc, updateDoc} from 'firebase/firestore'
+import {collection, doc, getDoc, getFirestore, setDoc, updateDoc, DocumentReference, DocumentData, DocumentSnapshot,} from 'firebase/firestore'
 import {updateProfile} from 'firebase/auth'
 import {Context, FirebaseUserAndUserType} from '../App'
 import {AlertDialogSlide} from './AlertFullScreen'
@@ -13,7 +13,7 @@ import {green} from '@mui/material/colors'
 import TextField from '@mui/material/TextField'
 import {FormControl, InputLabel, MenuItem} from '@mui/material'
 import Select from '@mui/material/Select'
-import {Box} from '@material-ui/core'
+import Box from "@mui/material/Box";
 
 const ageList = Array.from({length: 91}, (_, i) => i + 9)
 
@@ -156,7 +156,7 @@ export function EditDataProfile() {
                             id="simple-select"
                             value={valueUserAge}
                             label="Age"
-                            onChange={e => setUserAge(e.target.value)}
+                            onChange={e => setUserAge(e.target.value as string)}
                         >
                             {ageList.map((age) => (
                                 <MenuItem value={age} key={age}>
@@ -172,7 +172,7 @@ export function EditDataProfile() {
                             id="demo-simple-select"
                             value={valueUserCountry}
                             label="Сountry"
-                            onChange={e => setUserCountry(e.target.value)}
+                            onChange={e => setUserCountry(e.target.value as string)}
                         >
                             <MenuItem value={'Беларусь'}>Беларусь</MenuItem>
                             <MenuItem value={'Россия'}>Россия</MenuItem>
@@ -186,7 +186,7 @@ export function EditDataProfile() {
                             id="demo-simple-select"
                             value={valueUserSex}
                             label="Сountry"
-                            onChange={e => setUserSex(e.target.value)}
+                            onChange={e => setUserSex(e.target.value as string)}
                         >
                             <MenuItem value={'Парень'}>Парень</MenuItem>
                             <MenuItem value={'Девушка'}>Девушка</MenuItem>

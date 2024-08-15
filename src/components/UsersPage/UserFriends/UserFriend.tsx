@@ -1,10 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {Box} from '@material-ui/core'
 import Grid from '@mui/material/Grid'
 import Pagination from '@mui/material/Pagination'
 import {Context} from '../../../App'
 import Typography from '@mui/material/Typography'
 import {UserCard} from '../UserCard'
+import Box from "@mui/material/Box";
 
 export const UserFriend: React.FC = () => {
     const {user, userFriends} = useContext(Context)

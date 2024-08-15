@@ -1,7 +1,6 @@
 import React, {useContext} from 'react'
 import s from './Login.module.css'
 import {useNavigate} from 'react-router-dom'
-import {Button, Container, Grid} from '@material-ui/core'
 import {Context} from '../App'
 import {
     AuthProvider,
@@ -20,6 +19,9 @@ import AppleIcon from '@mui/icons-material/Apple'
 import WindowIcon from '@mui/icons-material/Window'
 import Stack from '@mui/material/Stack'
 import HomeIcon from '@mui/icons-material/Home'
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
 
 export function Login() {
     const {auth} = useContext(Context)
@@ -61,34 +63,34 @@ export function Login() {
                 <Grid style={{background: 'lightgray', borderRadius: '20px'}}
                       container
                       alignItems={'center'}
-                      direction={'column'}>
+                      direction='column'>
                     <Stack direction="column" spacing={2} style={{margin: '40px'}}>
                         <Button className={s.loginButton}
                                 startIcon={<GoogleIcon/>}
                                 onClick={() => login(googleProvider)}
-                                variant={'outlined'}>Login with GOOGLE</Button>
+                                variant='outlined'>Login with GOOGLE</Button>
                         <Button className={s.loginButton}
                                 disabled={true}
                                 startIcon={<AppleIcon/>}
                                 onClick={() => {
                                 }}
-                                variant={'outlined'}>Login with APPLE</Button>
+                                variant='outlined'>Login with APPLE</Button>
                         <Button className={s.loginButton}
                                 startIcon={<TwitterIcon/>}
                                 onClick={() => login(twitterProvider)}
-                                variant={'outlined'}>Login with Twitter</Button>
+                                variant='outlined'>Login with Twitter</Button>
                         <Button className={s.loginButton}
                                 startIcon={<GitHubIcon/>}
                                 onClick={() => login(githubProvider)}
-                                variant={'outlined'}>Login with GitHub</Button>
+                                variant='outlined'>Login with GitHub</Button>
                         <Button className={s.loginButton}
                                 startIcon={<FacebookIcon/>}
                                 onClick={() => login(facebookProvider)}
-                                variant={'outlined'}>Login with Facebook</Button>
+                                variant='outlined'>Login with Facebook</Button>
                         <Button className={s.loginButton}
                                 startIcon={<WindowIcon/>}
                                 onClick={() => login(microsoftProvider)}
-                                variant={'outlined'}>Login with Microsoft</Button>
+                                variant='outlined'>Login with Microsoft</Button>
                         <Button color="primary"
                                 startIcon={<HomeIcon/>}
                                 onClick={handleClickBtnToHome}

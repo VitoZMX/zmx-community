@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {Box, Tooltip} from '@material-ui/core'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import CardMedia from '@mui/material/CardMedia'
@@ -10,13 +9,14 @@ import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import {serverTimestamp} from 'firebase/firestore'
-import {FormControl, InputLabel, MenuItem} from '@mui/material'
+import { FormControl, InputLabel, MenuItem, Tooltip } from '@mui/material'
 import Select from '@mui/material/Select'
 import {quickBytesType} from '../../../types/types'
 import {FriendsAvatarGroup} from './FriendsAvatarGroup/FriendsAvatarGroup'
 import {profileAPI} from '../../../api/profile-api'
 import {quickBytesAPI} from '../../../api/quickBytes-api'
 import {Context, FirebaseUserAndUserType} from '../../../App'
+import Box from "@mui/material/Box";
 
 export function ProfileData({profile, author = false}: any) {
     const {user, setUser} = useContext(Context)
@@ -222,7 +222,7 @@ export function ProfileData({profile, author = false}: any) {
                                 fullWidth
                                 multiline
                                 maxRows={4}
-                                variant={'outlined'}
+                                variant='outlined'
                                 value={value}
                                 inputRef={inputRef}
                                 inputProps={{maxLength: 200}}
@@ -232,9 +232,9 @@ export function ProfileData({profile, author = false}: any) {
                             <div style={{display: 'flex', alignItems: 'center', marginTop: '4px'}}>
                                 <Button style={{marginRight: '4px', height: '40px'}} disabled={!value.length}
                                         onClick={ClearQBTextHandle}
-                                        variant={'outlined'}>Clear</Button>
+                                        variant='outlined'>Clear</Button>
                                 <Button style={{marginRight: '4px', height: '40px'}} onClick={sendQBTextHandler}
-                                        variant={'outlined'}>Send</Button>
+                                        variant='outlined'>Send</Button>
                                 <FormControl sx={{m: 1, width: '100%'}} size="small">
                                     <InputLabel id="demo-simple-select-speaks">How to say</InputLabel>
                                     <Select

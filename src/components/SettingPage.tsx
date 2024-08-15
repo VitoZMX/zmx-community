@@ -1,5 +1,4 @@
 import React, {ChangeEvent, useContext, useEffect, useState} from 'react'
-import {Container} from '@material-ui/core'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import ImageSearchIcon from '@mui/icons-material/ImageSearch'
@@ -13,6 +12,7 @@ import {Context} from '../App'
 import {AlertDialogSlide} from './AlertFullScreen'
 import {green} from '@mui/material/colors'
 import {EditDataProfile} from './EditDataProfile'
+import Container from "@mui/material/Container";
 
 export function SettingPage() {
     const [loading, setLoading] = React.useState(false)

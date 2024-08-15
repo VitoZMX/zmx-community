@@ -1,11 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {Box} from '@material-ui/core'
 import Grid from '@mui/material/Grid'
 import Pagination from '@mui/material/Pagination'
 import {userType} from '../../../types/types'
 import {Context} from '../../../App'
 import Typography from '@mui/material/Typography'
 import {UserCard} from '../UserCard'
+import Box from "@mui/material/Box";
 
 type allUsersPropsType = {
     allUsers: userType[];

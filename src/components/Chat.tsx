@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useRef, useState} from 'react'
-import {Container, Grid} from '@material-ui/core'
 import {useCollection} from 'react-firebase-hooks/firestore'
 import {collection, getFirestore, orderBy, query} from 'firebase/firestore'
 import {Preloader} from './common/Preloader'
@@ -8,6 +7,8 @@ import {AddMessageForm} from './AddMessageForm'
 import {Context} from '../App'
 import {useAuthState} from 'react-firebase-hooks/auth'
 import {ChatMessageType} from '../types/types'
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 
 export const Chat: React.FC = () => {
     const {auth, firestore} = useContext(Context)
@@ -15,7 +16,7 @@ export const Chat: React.FC = () => {
     const [messages, setMessages] = useState<ChatMessageType[]>([])
     const [loading, setLoading] = useState<boolean>(true) // добавляем состояние загрузки
     const [isAutoScroll, setIsAutoScroll] = useState(true)
-    const messagesAnchorRef = useRef<HTMLDivElement>(null)
+    const messagesAnchorRef = useRef<HTMLDivElement | null>(null)
 
     const messagesCollection = collection(getFirestore(), 'messages')
     const queryMessages = query(messagesCollection, orderBy('createdAt'))
