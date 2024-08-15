@@ -21,7 +21,7 @@ export const Preloader: React.FC<PreloaderPropsType> = ({mini = false}) => {
                       direction='column'>
                     <Box>
                         <img style={!mini ? {width: 300} : {width: 120}}
-                             src={'../../assets/image/preloader.svg'}
+                             src={preloader}
                              alt={'Preloader'}/>
                     </Box>
                 </Grid>
