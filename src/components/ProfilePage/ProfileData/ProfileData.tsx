@@ -11,7 +11,9 @@ import IconButton from '@mui/material/IconButton'
 import {serverTimestamp} from 'firebase/firestore'
 import { FormControl, InputLabel, MenuItem, Tooltip } from '@mui/material'
 import Select from '@mui/material/Select'
-import {quickBytesType} from '../../../types/types'
+import {NewsAddMessagesType, quickBytesType} from '../../../types/types'
+import {newsAPI} from '../../../api/news-api'
+import {NavLink} from 'react-router-dom'
 import {FriendsAvatarGroup} from './FriendsAvatarGroup/FriendsAvatarGroup'
 import {profileAPI} from '../../../api/profile-api'
 import {quickBytesAPI} from '../../../api/quickBytes-api'
@@ -23,6 +25,8 @@ export function ProfileData({profile, author = false}: any) {
     const [value, setValue] = useState('')
     const [valueSpeaks, setValueSpeaks] = useState('Говорит')
     const [qBPostsUser, setqBPostsUser] = useState<quickBytesType[]>([])
+    const [newsPosts, setNewsPosts] = useState<NewsAddMessagesType[]>([])
+    const [newsLoading, setNewsLoading] = useState(true)
     const inputRef = React.useRef<HTMLInputElement>()
 
     const ClearQBTextHandle = () => {
@@ -72,6 +76,12 @@ export function ProfileData({profile, author = false}: any) {
             })
         })
     }
+
+    useEffect(() => {
+        if (!profile?.uid) return
+        setNewsLoading(true)
+        newsAPI.getNewsByAuthor(profile.uid).then(setNewsPosts).catch(() => setNewsPosts([])).finally(() => setNewsLoading(false))
+    }, [profile?.uid])
 
     useEffect(() => {
         if (profile.qBPostsId && profile.qBPostsId.length > 0) {
@@ -161,18 +171,22 @@ export function ProfileData({profile, author = false}: any) {
                     </Box>
                 </div>
             </Grid>
-            <Grid item md={8} sm={12}>
-                <div style={{
-                    backgroundColor: 'rgba(25,118,210,0.2)',
-                    boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.15)',
-                    borderRadius: '12px',
-                    padding: '15px'
-                }}>
-                    <h4>Блок для добавление новости. xs=12 Блок для добавление новости. xs=12Блок для добавление
-                        новости. xs=12Блок для добавление новости. xs=12Блок для добавление новости. xs=12Блок для
-                        добавление новости. xs=12Блок для добавление новости. xs=12Блок для добавление новости.
-                        xs=12Блок для добавление новости. xs=12Блок для добавление новости. xs=12</h4>
-                </div>
+            <Grid item md={8} sm={12} xs={12}>
+                <Box sx={{backgroundColor: 'background.paper', boxShadow: 2, borderRadius: 2, p: 2, height: '100%'}}>
+                    <Typography variant="h5" gutterBottom>Опубликованные новости</Typography>
+                    {newsLoading && <Typography color="text.secondary">Загрузка новостей...</Typography>}
+                    {!newsLoading && newsPosts.length === 0 && <Typography color="text.secondary">Пользователь ещё не опубликовал новости.</Typography>}
+                    {!newsLoading && newsPosts.length > 0 && <Grid container spacing={2}>
+                        {newsPosts.map(post => (
+                            <Grid item xs={12} sm={6} key={post.id}>
+                                <Box component={NavLink} to={'/news/' + post.id} sx={{display: 'block', color: 'inherit', textDecoration: 'none', borderRadius: 2, overflow: 'hidden', border: 1, borderColor: 'divider', '&:hover': {boxShadow: 4}}}>
+                                    <CardMedia component="img" image={post.img || imgF} alt={post.title} sx={{height: 150, objectFit: 'cover'}}/>
+                                    <Typography sx={{p: 1.5, fontWeight: 600}}>{post.title}</Typography>
+                                </Box>
+                            </Grid>
+                        ))}
+                    </Grid>}
+                </Box>
             </Grid>
             <Grid item sm={12} lg={4} md={4} xs={12}>
                 <div style={{

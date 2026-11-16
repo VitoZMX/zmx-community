@@ -13,6 +13,9 @@ import {AlertDialogSlide} from './AlertFullScreen'
 import {green} from '@mui/material/colors'
 import {EditDataProfile} from './EditDataProfile'
 import Container from "@mui/material/Container";
+import TextField from '@mui/material/TextField'
+import {FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from '@mui/material'
+import {defaultThemeSettings, ThemeMode, ThemeSettings} from '../types/types'
 
 export function SettingPage() {
     const [loading, setLoading] = React.useState(false)
@@ -21,6 +24,10 @@ export function SettingPage() {
     const {user} = useContext(Context)
     const {auth} = useContext(Context)
     const {setUser} = useContext(Context)
+    const {firestore} = useContext(Context)
+    const [themeSettings, setThemeSettings] = useState<ThemeSettings>(user?.theme || defaultThemeSettings)
+    const [themeSaving, setThemeSaving] = useState(false)
+    const [themeMessage, setThemeMessage] = useState('')
     const [checked, setChecked] = React.useState(false)
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
     const [showAlert, setShowAlert] = useState(false)
@@ -33,8 +40,36 @@ export function SettingPage() {
         setIsEditing(!isEditing)
     }
 
+    useEffect(() => {
+        setThemeSettings(user?.theme || defaultThemeSettings)
+    }, [user?.theme])
+
+    const updateTheme = <K extends keyof ThemeSettings>(key: K, value: ThemeSettings[K]) => {
+        setThemeSettings(previous => ({...previous, [key]: value}))
+    }
+
+    const handleThemeModeChange = (event: SelectChangeEvent<ThemeMode>) => {
+        updateTheme('mode', event.target.value as ThemeMode)
+    }
+
+    const saveTheme = async () => {
+        if (!user) return
+        setThemeSaving(true)
+        setThemeMessage('')
+        try {
+            const userRef = doc(firestore, 'users', user.uid)
+            await setDoc(userRef, {theme: themeSettings}, {merge: true})
+            setUser({...user, theme: themeSettings})
+            setThemeMessage('Theme saved')
+        } catch (error) {
+            console.error('Не удалось сохранить тему', error)
+            setThemeMessage('Не удалось сохранить тему')
+        } finally {
+            setThemeSaving(false)
+        }
+    }
+
     const handleSave = () => {
-        //onSave(textValue);
         setIsEditing(false)
     }
 
@@ -252,7 +287,14 @@ export function SettingPage() {
                         borderRadius: '12px',
                         padding: '10px'
                     }}>
-                        <h4>Тут можно удалить свои посты.</h4>
+                        <Typography variant="h6">User theme</Typography>
+                         <Grid container spacing={2}>
+                             {themeSettings.mode === 'custom' && ([['primary', 'Primary'], ['secondary', 'Secondary'], ['background', 'Background'], ['surface', 'Surface']] as const).map(([key, label]) => <Grid item xs={6} md={3} key={key}><TextField fullWidth label={label} type="color" value={themeSettings[key]} onChange={event => updateTheme(key, event.target.value)} InputLabelProps={{shrink: true}} /></Grid>)}
+                             <Grid item xs={12} md={4}><FormControl fullWidth><InputLabel id="theme-mode-label">Mode</InputLabel><Select<ThemeMode> labelId="theme-mode-label" value={themeSettings.mode} label="Mode" onChange={handleThemeModeChange}><MenuItem value="default">Default</MenuItem><MenuItem value="dark">Dark</MenuItem><MenuItem value="custom">Custom</MenuItem></Select></FormControl></Grid>
+                         </Grid>
+                         <Button variant="contained" sx={{mt: 2}} onClick={saveTheme} disabled={themeSaving}>{themeSaving ? 'Saving...' : 'Save theme'}</Button>
+                         {themeMessage && <Typography variant="body2">{themeMessage}</Typography>}
+                         <h4>Тут можно удалить свои посты.</h4>
                     </div>
                 </Grid>
             </Grid>}

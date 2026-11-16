@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function validText(value) { return value is string && value.size() > 0 && value.size() <= 4000; }
+    match /users/{userId} {
+      allow read: if signedIn();
+      allow create, update: if signedIn() && request.auth.uid == userId;
+    }
+    match /news/{newsId} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if signedIn() && resource.data.userId == request.auth.uid && request.resource.data.userId == resource.data.userId;
+      allow delete: if signedIn() && resource.data.userId == request.auth.uid;
+      match /comments/{commentId} {
+        allow read: if signedIn();
+        allow create: if signedIn() && exists(/databases/$(database)/documents/news/$(newsId))
+          && request.resource.data.newsId == newsId
+          && request.resource.data.userId == request.auth.uid
+          && validText(request.resource.data.text)
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.updatedAt == null;
+        allow update: if signedIn() && resource.data.userId == request.auth.uid
+          && request.time <= resource.data.createdAt + duration.value(5, 'm')
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['text', 'updatedAt'])
+          && validText(request.resource.data.text)
+          && request.resource.data.updatedAt == request.time;
+        allow delete: if signedIn() && resource.data.userId == request.auth.uid;
+        match /reactions/{userId} {
+          allow read: if signedIn();
+          allow create: if signedIn() && userId == request.auth.uid
+            && request.resource.data.type in ['like', 'dislike']
+            && request.resource.data.createdAt == request.time;
+          allow update: if signedIn() && userId == request.auth.uid
+            && request.resource.data.type in ['like', 'dislike'];
+          allow delete: if signedIn() && userId == request.auth.uid;
+        }
+      }
+    }
+  }
+}
