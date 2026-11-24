@@ -1,0 +1,11 @@
+/* Shared layout primitives used across the app. */
+:root { color-scheme: light; }
+html, body, #root { min-height: 100%; }
+body { overflow-x: hidden; }
+.app-page { min-height: 100vh; padding-top: 72px; padding-bottom: 48px; }
+.app-panel { border: 1px solid rgba(100, 116, 139, .16); border-radius: 16px; box-shadow: 0 10px 30px rgba(15, 23, 42, .08); }
+@media (max-width: 600px) {
+  .app-page { padding-top: 64px; padding-bottom: 32px; }
+  .app-panel { border-radius: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }

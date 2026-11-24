@@ -2,7 +2,8 @@ import React, {useContext, useEffect, useState} from 'react'
 import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import CircularProgress from '@mui/material/CircularProgress'
+import Alert from '@mui/material/Alert'
+import Skeleton from '@mui/material/Skeleton'
 import {doc, getDoc, setDoc} from 'firebase/firestore'
 import {Context} from '../../App'
 import {FilterValuesType, TaskType, Todolist} from './ToDoList'
@@ -30,6 +31,7 @@ export function ToDoListPage() {
     const [tasksObj, setTasksObj] = useState<TasksStateType>({})
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
+    const [error, setError] = useState('')
 
     useEffect(() => {
         if (!user) return
@@ -40,7 +42,7 @@ export function ToDoListPage() {
             else { const defaults = initialData(); setTodoList(defaults.lists); setTasksObj(defaults.tasks); await persist(defaults.lists, defaults.tasks) }
             setLoading(false)
         }
-        load().catch(() => setLoading(false))
+        load().catch(() => {setError('Не удалось загрузить списки задач'); setLoading(false)})
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user, firestore])
 
@@ -60,8 +62,8 @@ export function ToDoListPage() {
     const removeList = (listId: string) => { const tasks = {...tasksObj}; delete tasks[listId]; update(todolists.filter(list => list.id !== listId), tasks) }
     const addList = (title: string) => { const list = {id: createId(), title, filter: 'all' as FilterValuesType}; update([list, ...todolists], {...tasksObj, [list.id]: []}) }
 
-    if (loading) return <Container sx={{mt: 10, textAlign: 'center'}}><CircularProgress/></Container>
-    return <Container maxWidth="xl" sx={{mt: 10, mb: 6}}>
+    if (loading) return <Container maxWidth="xl" sx={{mt: 10}}><Grid container spacing={2}>{[1, 2, 3].map(item => <Grid item xs={12} sm={6} md={4} key={item}><Skeleton variant="rounded" height={440}/></Grid>)}</Grid></Container>
+    return <Container maxWidth="xl" sx={{mt: 10, mb: 6}}>{error && <Alert severity="error" sx={{mb: 2}}>{error}</Alert>}
         <Grid container spacing={2}>
             <Grid item xs={12} display="flex" alignItems="center" justifyContent="space-between"><AddItemForm addItem={addList}/>{saving && <Typography variant="caption">Сохранение...</Typography>}</Grid>
             <Grid item xs={12}><Typography color="text.secondary">Изменения сохраняются автоматически в вашем профиле.</Typography></Grid>

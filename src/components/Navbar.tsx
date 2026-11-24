@@ -1,16 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
-import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
-import Button from '@mui/material/Button'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { NavLink, useNavigate } from 'react-router-dom'
-import { LOGIN_ROUTE } from '../utils/constRoute'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import Avatar from '@mui/material/Avatar'
-import { ButtonBase, IconButton, Menu, MenuItem } from '@mui/material'
+import React, {useContext, useState} from 'react'
+import {NavLink, useNavigate} from 'react-router-dom'
+import {AppBar, Avatar, Badge, Box, Button, Container, Divider, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Stack, Toolbar, Typography} from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import PersonIcon from '@mui/icons-material/Person'
 import SettingsIcon from '@mui/icons-material/Settings'
 import PeopleIcon from '@mui/icons-material/People'
@@ -18,179 +10,18 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import NewspaperIcon from '@mui/icons-material/Newspaper'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import ChatIcon from '@mui/icons-material/Chat'
-import { Context } from '../App'
-import Grid from "@mui/material/Grid";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import logo from '../assets/image/logozmx.svg'
+import {Context} from '../App'
+import {useI18n} from '../i18n'
 
-const theme = createTheme({
-    palette: {
-        primary: {
-            main: '#ffffff',
-        }
-    }
-})
-
+type Notification = {id: string; text: string; createdAt: Date; read: boolean}
+const initialNotifications: Notification[] = []
 export function Navbar() {
-    const {auth} = useContext(Context)
-    const [profile, loadingUser] = useAuthState(auth)
-    const {user, setUser} = useContext(Context)
-    const [loading, setLoading] = useState<boolean>(true)
-    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
-    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
-    const navigate = useNavigate()
-
-    //setUser(profile)
-
-    const handleLinkClick = () => {
-        navigate('/home')
-    }
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget)
-    }
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null)
-    }
-    const handleLogoutClick = () => {
-        setAnchorElUser(null)
-        setUser(null)
-        auth.signOut()
-    }
-
-    const getFirstNameUser = (str: string | null) => {
-        if (!str) {
-            return
-        }
-        const words = str.split(' ')
-      return words[0].charAt(0).toUpperCase() + words[0].slice(1)
-    }
-
-    const settings = [
-        {text: 'My Profile', link: '/profile', icon: <PersonIcon/>},
-        {text: 'Users', link: '/users', icon: <PeopleIcon/>},
-        {text: 'Chat', link: '/chat', icon: <ChatIcon/>},
-        {text: 'News', link: '/news', icon: <NewspaperIcon/>},
-        {text: 'To Do List', link: '/todo', icon: <FormatListBulletedIcon/>},
-        {text: 'Settings', link: '/settings', icon: <SettingsIcon/>},
-        {text: 'Log out', link: '/login', icon: <LogoutIcon/>, onClick: handleLogoutClick},
-    ]
-
-    useEffect(() => {
-        setLoading(true)
-        if (!loadingUser) {
-            setLoading(false)
-        }
-    }, [loadingUser])
-
-    return (
-        <AppBar position="fixed" style={{backgroundColor: 'rgba(25, 118, 210, 0.8)', backdropFilter: 'blur(2px)'}}>
-            <Container maxWidth="xl">
-                <Toolbar disableGutters variant='dense'>
-                    <Avatar src={logo} alt="logoNavBar" variant="square"
-                            sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        style={{cursor: 'pointer'}}
-                        onClick={handleLinkClick}
-                        sx={{
-                            mr: 6,
-                            display: {xs: 'none', md: 'flex'},
-                            textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
-                            fontFamily: 'Roboto',
-                            fontWeight: 300,
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >ZMX Community</Typography>
-                    <Typography
-                        style={{cursor: 'pointer'}}
-                        variant="h5"
-                        noWrap
-                        onClick={handleLinkClick}
-                        sx={{
-                            mr: 2,
-                            display: {xs: 'flex', md: 'none'},
-                            textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
-                            flexGrow: 1,
-                            fontFamily: 'Roboto',
-                            fontWeight: 200,
-                            letterSpacing: '.1rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >ZMX</Typography>
-                    <Box sx={{flexGrow: 1}}>
-                        <Grid container justifyContent={'flex-end'}>
-                            <ThemeProvider theme={theme}>
-                                {loading ?
-                                    ('')
-                                    : user ? (
-                                            <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                                <IconButton onClick={handleOpenUserMenu}
-                                                            sx={{
-                                                                p: 0,
-                                                                padding: '0 0 0 16px',
-                                                                borderRadius: '10px 20px 20px 10px'
-                                                            }}>
-                                                    <Typography variant="body1" sx={{
-                                                        color: 'white',
-                                                        mr: 2,
-                                                        textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
-                                                        fontFamily: 'Roboto',
-                                                        fontWeight: 400,
-                                                    }}>
-                                                        {getFirstNameUser(user.displayName)}
-                                                    </Typography>
-                                                    <Avatar alt={user.displayName || 'ProfileAvatar'}
-                                                            src={user.photoURL || undefined}
-                                                            sx={{bgcolor: '#53b227'}}
-                                                    />
-                                                </IconButton>
-                                                <Menu
-                                                    sx={{mt: '40px'}}
-                                                    id="menu-appbar"
-                                                    anchorEl={anchorElUser}
-                                                    anchorOrigin={{
-                                                        vertical: 'top',
-                                                        horizontal: 'right',
-                                                    }}
-                                                    keepMounted
-                                                    transformOrigin={{
-                                                        vertical: 'top',
-                                                        horizontal: 'right',
-                                                    }}
-                                                    open={Boolean(anchorElUser)}
-                                                    onClose={handleCloseUserMenu}
-                                                >
-                                                    {settings.map(({text, link, icon, onClick}) => (
-                                                        <ButtonBase
-                                                            component={NavLink}
-                                                            to={link}
-                                                            style={{display: 'flex', alignItems: 'center'}}
-                                                            key={text}
-                                                        >
-                                                            <MenuItem style={{width: '100%'}}
-                                                                      onClick={onClick || handleCloseUserMenu}>
-                                                                {icon}
-                                                                <Typography sx={{ml: 2}}>{text}</Typography>
-                                                            </MenuItem>
-                                                        </ButtonBase>
-                                                    ))}
-                                                </Menu>
-                                            </Box>
-                                        )
-                                        :
-                                        (
-                                            <NavLink to={LOGIN_ROUTE}>
-                                                <Button variant='outlined'>Login</Button>
-                                            </NavLink>
-                                        )
-                                }
-                            </ThemeProvider>
-                        </Grid>
-                    </Box>
-                </Toolbar>
-            </Container>
-        </AppBar>
-    )
+    const {auth, user} = useContext(Context); const {language, setLanguage, t} = useI18n(); const navigate = useNavigate(); const [drawer, setDrawer] = useState(false); const [notificationAnchor, setNotificationAnchor] = useState<HTMLElement | null>(null); const [notifications, setNotifications] = useState(initialNotifications)
+    const unread = notifications.filter(item => !item.read).length
+    const settings = [{text: t('profile'), link: '/profile', icon: <PersonIcon/>}, {text: t('users'), link: '/users', icon: <PeopleIcon/>}, {text: t('chat'), link: '/chat', icon: <ChatIcon/>}, {text: t('news'), link: '/news', icon: <NewspaperIcon/>}, {text: t('todo'), link: '/todo', icon: <FormatListBulletedIcon/>}, {text: t('settings'), link: '/settings', icon: <SettingsIcon/>}]
+    const openNotifications = (event: React.MouseEvent<HTMLElement>) => {setNotificationAnchor(event.currentTarget); setNotifications(items => items.map(item => ({...item, read: true})))}
+    const logout = () => {setDrawer(false); void auth.signOut()}
+    return <><AppBar position="fixed" sx={{backgroundColor: 'rgba(25,118,210,.88)', backdropFilter: 'blur(8px)'}}><Container maxWidth="xl"><Toolbar disableGutters sx={{minHeight: 64}}><Avatar src={logo} alt="ZMX Community" variant="square" sx={{mr: 1, display: {xs: 'none', sm: 'flex'}}}/><Typography variant="h6" sx={{cursor: 'pointer', flexGrow: 1, fontWeight: 700}} onClick={() => navigate('/home')}>ZMX Community</Typography>{user ? <Stack direction="row" spacing={1}><IconButton color="inherit" aria-label={t('notifications')} onClick={openNotifications}><Badge color="error" badgeContent={unread}><NotificationsNoneIcon/></Badge></IconButton><IconButton color="inherit" aria-label="Открыть меню" onClick={() => setDrawer(true)}><MenuIcon/></IconButton></Stack> : <NavLink to="/login"><Button color="inherit">Login</Button></NavLink>}</Toolbar></Container></AppBar><Menu anchorEl={notificationAnchor} open={Boolean(notificationAnchor)} onClose={() => setNotificationAnchor(null)}><Box sx={{width: {xs: 280, sm: 360}, p: 1}}><Typography variant="h6" sx={{px: 1}}>{t('notifications')}</Typography>{notifications.length === 0 ? <Typography color="text.secondary" sx={{p: 1}}>{t('noNotifications')}</Typography> : notifications.map(item => <MenuItem key={item.id}><ListItemIcon>{item.read ? <CheckCircleIcon color="success"/> : <NotificationsNoneIcon/>}</ListItemIcon><Box><Typography variant="body2">{item.text}</Typography><Typography variant="caption" color="text.secondary">{item.createdAt.toLocaleString()}</Typography></Box></MenuItem>)}</Box></Menu><Drawer anchor="right" open={drawer} onClose={() => setDrawer(false)} ModalProps={{keepMounted: true}} PaperProps={{sx: {width: {xs: 'min(88vw, 360px)', sm: 360}, backgroundColor: 'rgba(15, 23, 42, .94)', backgroundImage: 'linear-gradient(155deg, rgba(37, 99, 235, .22), rgba(15, 23, 42, .96) 42%)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderLeft: '1px solid rgba(255,255,255,.14)', boxShadow: '-18px 0 50px rgba(2, 6, 23, .35)', willChange: 'transform'}}} slotProps={{backdrop: {sx: {backgroundColor: 'rgba(2, 6, 23, .42)', backdropFilter: 'blur(2px)', WebkitBackdropFilter: 'blur(2px)'}}}}><Box sx={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column'}} role="presentation"><Box sx={{p: 2.5, color: 'primary.contrastText', background: 'linear-gradient(135deg, rgba(59,130,246,.9), rgba(29,78,216,.72))', borderBottom: '1px solid rgba(255,255,255,.16)'}}><Stack direction="row" spacing={1.5} alignItems="center"><Avatar src={user?.photoURL || undefined} alt={user?.displayName || 'Profile'}/><Box><Typography fontWeight={700}>{user?.displayName}</Typography><Typography variant="caption">{user?.email}</Typography></Box></Stack></Box><List sx={{p: 1.5, flex: 1, overflowY: 'auto', '& .MuiListItemButton-root': {borderRadius: 2, mb: .5, color: 'rgba(255,255,255,.84)', transition: 'background-color 160ms ease, color 160ms ease', '&:hover': {backgroundColor: 'rgba(255,255,255,.12)', color: '#fff'}, '&.active': {backgroundColor: 'rgba(255,255,255,.16)', color: '#fff'}}}}>{settings.map(item => <ListItemButton key={item.link} component={NavLink} to={item.link} onClick={() => setDrawer(false)}><ListItemIcon>{item.icon}</ListItemIcon><ListItemText primary={item.text}/></ListItemButton>)}</List><Divider/><Box sx={{p: 1.5, borderTop: '1px solid rgba(255,255,255,.12)'}}><ListItemButton onClick={logout}><ListItemIcon><LogoutIcon/></ListItemIcon><ListItemText primary={t('logout')}/></ListItemButton><Stack direction="row" justifyContent="space-between" alignItems="center" sx={{px: 2, py: 1}}><Typography variant="body2">{t('language')}</Typography><Stack direction="row" spacing={.5}>{(['ru', 'en'] as const).map(code => <Button key={code} size="small" variant={language === code ? 'contained' : 'outlined'} onClick={() => setLanguage(code)}>{code.toUpperCase()}</Button>)}</Stack></Stack></Box></Box></Drawer></>
 }

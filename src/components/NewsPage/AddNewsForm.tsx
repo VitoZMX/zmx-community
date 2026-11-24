@@ -11,6 +11,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import AddIcon from '@mui/icons-material/Add'
 import {addDoc, collection, getFirestore, serverTimestamp} from 'firebase/firestore'
 import {Context} from '../../App'
+import {permissionsFor} from '../../roles'
 import {getDownloadURL, getStorage, ref, uploadBytes} from 'firebase/storage'
 
 export function AddNewsForm() {
@@ -28,6 +29,8 @@ export function AddNewsForm() {
     const [valueMinText, setValueMinText] = useState('')
     const [valueMaxText, setValueMaxText] = useState('')
     const {user} = useContext(Context)
+    const {rolePermissions} = useContext(Context)
+    const canCreateNews = Boolean(user && permissionsFor(user.role, rolePermissions).createNews)
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
     const [error, setError] = useState('')
     const [saving, setSaving] = useState(false)
@@ -61,6 +64,8 @@ export function AddNewsForm() {
         setSelectedFile(file)
     }
 
+    const saveDraft = async () => { if (!user || saving || !valueTitle.trim()) return; setSaving(true); try { await addDoc(newsCollection, {title: valueTitle.trim(), MinText: valueMinText.trim(), MaxText: valueMaxText.trim(), userId: user.uid, authorName: user.displayName || '', authorPhotoURL: user.photoURL || null, img: '', isPublic: false, status: 'draft', firstPublishedAt: null, createdAt: serverTimestamp(), updatedAt: null}); setValueTitle(''); setValueMinText(''); setValueMaxText(''); handleClose() } catch { setError('Не удалось сохранить черновик') } finally { setSaving(false) } }
+
     const sendNewsHandler = async () => {
         if (!user || saving) return
         setSaving(true)
@@ -84,7 +89,7 @@ export function AddNewsForm() {
             await addDoc(newsCollection, {
                 title: valueTitle.trim(), MinText: valueMinText.trim(), MaxText: valueMaxText.trim(),
                 userId: user.uid, authorName: user.displayName || '', authorPhotoURL: user.photoURL || null,
-                img: imgUrl, createdAt: serverTimestamp(), updatedAt: null
+                img: imgUrl, isPublic: true, status: 'published', firstPublishedAt: serverTimestamp(), createdAt: serverTimestamp(), updatedAt: null
             })
             setValueTitle(''); setValueMinText(''); setValueMaxText(''); setSelectedFile(null)
             handleClose()
@@ -100,12 +105,12 @@ export function AddNewsForm() {
 
     return (
         <div>
-            <Button variant="outlined"
+            {canCreateNews && <Button variant="outlined"
                     onClick={handleClickOpen}
                     style={{marginBottom: '10px'}}>
                 <AddIcon/>
                 Add news
-            </Button>
+            </Button>}
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>What's new?</DialogTitle>
                 <DialogContent>
@@ -150,7 +155,7 @@ export function AddNewsForm() {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={sendNewsHandler} disabled={saving}>{saving ? 'Saving...' : 'Send'}</Button>
+                    <Button onClick={saveDraft} disabled={saving}>Сохранить черновик</Button><Button onClick={sendNewsHandler} disabled={saving}>{saving ? 'Saving...' : 'Send'}</Button>
                 </DialogActions>
             </Dialog>
         </div>
