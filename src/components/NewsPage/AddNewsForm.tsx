@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {ChangeEvent, useContext, useState} from 'react'
 import Button from '@mui/material/Button'
+import Alert from '@mui/material/Alert'
 import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -10,6 +11,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import AddIcon from '@mui/icons-material/Add'
 import {addDoc, collection, getFirestore, serverTimestamp} from 'firebase/firestore'
 import {Context} from '../../App'
+import {permissionsFor} from '../../roles'
 import {getDownloadURL, getStorage, ref, uploadBytes} from 'firebase/storage'
 
 export function AddNewsForm() {
@@ -27,7 +29,11 @@ export function AddNewsForm() {
     const [valueMinText, setValueMinText] = useState('')
     const [valueMaxText, setValueMaxText] = useState('')
     const {user} = useContext(Context)
+    const {rolePermissions} = useContext(Context)
+    const canCreateNews = Boolean(user && permissionsFor(user.role, rolePermissions).createNews)
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
+    const [error, setError] = useState('')
+    const [saving, setSaving] = useState(false)
 
     const inputRef = React.useRef<HTMLInputElement>()
     const newsCollection = collection(getFirestore(), 'news')
@@ -48,61 +54,67 @@ export function AddNewsForm() {
     }*/
 
     const PhotoSelected = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length) {
-            setSelectedFile(e.target.files[0])
+        const file = e.target.files?.[0]
+        if (!file) return
+        if (!file.type.startsWith('image/') || file.size > 10 * 1024 * 1024) {
+            setError('Выберите изображение размером не более 10 МБ.')
+            return
         }
+        setError('')
+        setSelectedFile(file)
     }
 
+    const saveDraft = async () => { if (!user || saving || !valueTitle.trim()) return; setSaving(true); try { await addDoc(newsCollection, {title: valueTitle.trim(), MinText: valueMinText.trim(), MaxText: valueMaxText.trim(), userId: user.uid, authorName: user.displayName || '', authorPhotoURL: user.photoURL || null, img: '', isPublic: false, status: 'draft', firstPublishedAt: null, createdAt: serverTimestamp(), updatedAt: null}); setValueTitle(''); setValueMinText(''); setValueMaxText(''); handleClose() } catch { setError('Не удалось сохранить черновик') } finally { setSaving(false) } }
+
     const sendNewsHandler = async () => {
-        if (!user) return
+        if (!user || saving) return
+        setSaving(true)
+        setError('')
 
         if (!valueTitle.trim()) {
-            ClearMessageHandle()
+            setError('Введите заголовок новости.')
+            setSaving(false)
             return
         }
 
-        if (user) {
+        try {
             let imgUrl = ''
             if (selectedFile) {
                 const storage = getStorage()
-                const storageRef = ref(storage, `news/${selectedFile.name}`)
+                const safeName = selectedFile.name.replace(/[^a-zA-Z0-9._-]/g, '_')
+                const storageRef = ref(storage, `news/${user.uid}/${Date.now()}-${safeName}`)
                 const snapshot = await uploadBytes(storageRef, selectedFile)
                 imgUrl = await getDownloadURL(snapshot.ref)
             }
-            const newsData = {
-                title: valueTitle,
-                MinText: valueMinText,
-                MaxText: valueMaxText,
-                userId: user.uid,
-                img: imgUrl,
-                createdAt: serverTimestamp()
-            }
-            try {
-                const newMessageRef = await addDoc(newsCollection, newsData)
-                console.log('Message sent successfully! ID:', newMessageRef.id)
-                setValueTitle('')
-                setValueMinText('')
-                setValueMaxText('')
-                ClearMessageHandle()
-                setSelectedFile(null)
-                handleClose()
-            } catch (error) {
-                console.error('Error sending message: ', error)
-            }
+            await addDoc(newsCollection, {
+                title: valueTitle.trim(), MinText: valueMinText.trim(), MaxText: valueMaxText.trim(),
+                userId: user.uid, authorName: user.displayName || '', authorPhotoURL: user.photoURL || null,
+                img: imgUrl, isPublic: true, status: 'published', firstPublishedAt: serverTimestamp(), createdAt: serverTimestamp(), updatedAt: null
+            })
+            setValueTitle(''); setValueMinText(''); setValueMaxText(''); setSelectedFile(null)
+            handleClose()
+        } catch (error: any) {
+            console.error('Error sending news:', error)
+            setError(error?.code === 'storage/quota-exceeded'
+                ? 'Хранилище Firebase переполнено. Освободите место или подключите платный тариф Firebase.'
+                : 'Не удалось добавить новость. Проверьте настройки Firebase и попробуйте ещё раз.')
+        } finally {
+            setSaving(false)
         }
     }
 
     return (
         <div>
-            <Button variant="outlined"
+            {canCreateNews && <Button variant="outlined"
                     onClick={handleClickOpen}
                     style={{marginBottom: '10px'}}>
                 <AddIcon/>
                 Add news
-            </Button>
+            </Button>}
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>What's new?</DialogTitle>
                 <DialogContent>
+                    {error && <Alert severity="error" sx={{mb: 2}}>{error}</Alert>}
                     <DialogContentText>
                         Что бы добавить новость на сайт, пожалйста, заполните все поля.
                     </DialogContentText>
@@ -138,12 +150,12 @@ export function AddNewsForm() {
                     />
                     <Button variant="outlined" component="label" style={{marginTop: '10px'}}>
                         Прикрепить файл обложки
-                        <input type="file" onChange={PhotoSelected} hidden/>
+                        <input type="file" accept="image/jpeg,image/png,image/gif,image/webp" onChange={PhotoSelected} hidden/>
                     </Button>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={sendNewsHandler}>Send</Button>
+                    <Button onClick={saveDraft} disabled={saving}>Сохранить черновик</Button><Button onClick={sendNewsHandler} disabled={saving}>{saving ? 'Saving...' : 'Send'}</Button>
                 </DialogActions>
             </Dialog>
         </div>

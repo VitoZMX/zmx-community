@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField'
 import {addDoc, collection, getFirestore, serverTimestamp} from 'firebase/firestore'
 import Button from "@mui/material/Button";
 
-export function AddMessageForm({user}: any) {
+export function AddMessageForm({user, onSent}: {user: any; onSent?: () => void}) {
     const [value, setValue] = useState('')
     const inputRef = React.useRef<HTMLInputElement>()
     const messagesCollection = collection(getFirestore(), 'messages')
@@ -31,7 +31,7 @@ export function AddMessageForm({user}: any) {
 
         if (user) {
             const messageData = {
-                message: value,
+                message: value.trim().slice(0, 2000),
                 userId: user.uid,
                 displayName: user.displayName,
                 photoURL: user.photoURL,
@@ -42,6 +42,7 @@ export function AddMessageForm({user}: any) {
                 console.log('Message sent successfully! ID:', newMessageRef.id)
                 setValue('')
                 ClearMessageHandle()
+                onSent?.()
             } catch (error) {
                 console.error('Error sending message: ', error)
             }
@@ -59,9 +60,13 @@ export function AddMessageForm({user}: any) {
                 value={value}
                 inputRef={inputRef}
                 onChange={e => setValue(e.target.value)}
+                inputProps={{maxLength: 2000, 'aria-label': 'Сообщение'}}
+                placeholder="Напишите сообщение…"
                 onKeyDown={keyEnterHandle}/>
-            <Button onClick={sendMessageHandler} variant='outlined'>Send</Button>
-            <Button disabled={!value.length} onClick={ClearMessageHandle} variant='outlined'>Clear</Button>
+            <div style={{display: 'flex', gap: '8px', marginTop: '8px', justifyContent: 'flex-end'}}>
+                <Button onClick={sendMessageHandler} variant='contained'>Send</Button>
+                <Button disabled={!value.length} onClick={ClearMessageHandle} variant='outlined'>Clear</Button>
+            </div>
         </div>
     )
 }

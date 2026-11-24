@@ -1,102 +1,37 @@
-import React, {useContext, useEffect, useRef, useState} from 'react'
+import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react'
 import {useCollection} from 'react-firebase-hooks/firestore'
-import {collection, getFirestore, orderBy, query} from 'firebase/firestore'
-import {Preloader} from './common/Preloader'
+import {collection, getDocs, limit, orderBy, query, serverTimestamp, updateDoc, doc} from 'firebase/firestore'
+import {Alert, Box, Container, Paper, Skeleton, Typography} from '@mui/material'
 import {Message} from './Message'
 import {AddMessageForm} from './AddMessageForm'
 import {Context} from '../App'
 import {useAuthState} from 'react-firebase-hooks/auth'
 import {ChatMessageType} from '../types/types'
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
 
+const EDIT_WINDOW_SECONDS = 5 * 60
 export const Chat: React.FC = () => {
     const {auth, firestore} = useContext(Context)
     const [user] = useAuthState(auth)
-    const [messages, setMessages] = useState<ChatMessageType[]>([])
-    const [loading, setLoading] = useState<boolean>(true) // добавляем состояние загрузки
+    const [loading, setLoading] = useState(true)
     const [isAutoScroll, setIsAutoScroll] = useState(true)
+    const scrollContainerRef = useRef<HTMLDivElement | null>(null)
     const messagesAnchorRef = useRef<HTMLDivElement | null>(null)
+    const [clock, setClock] = useState(() => Date.now())
 
-    const messagesCollection = collection(getFirestore(), 'messages')
-    const queryMessages = query(messagesCollection, orderBy('createdAt'))
-    const [messagesSnapshot, error] = useCollection(queryMessages)
+    useEffect(() => { const timer = window.setInterval(() => setClock(Date.now()), 1000); return () => window.clearInterval(timer) }, [])
+    const messagesCollection = collection(firestore, 'messages')
+    const queryMessages = useMemo(() => query(messagesCollection, orderBy('createdAt', 'desc'), limit(100)), [firestore])
+    const [snapshot, error] = useCollection(queryMessages)
+    const messages = useMemo(() => snapshot?.docs.map(item => ({id: item.id, ...item.data()} as ChatMessageType)).reverse() || [], [snapshot])
 
-    const scrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
-        const element = e.currentTarget
-        if (Math.abs((element.scrollHeight - element.scrollTop) - element.clientHeight) < 800) {
-            !isAutoScroll && setIsAutoScroll(true)
-        } else {
-            isAutoScroll && setIsAutoScroll(false)
-        }
-    }
-
+    useEffect(() => { if (snapshot || error) setLoading(false) }, [snapshot, error])
     useEffect(() => {
-        if (isAutoScroll) {
-            messagesAnchorRef.current?.scrollIntoView({behavior: 'smooth'})
-        }
-    }, [messages])
-
-    useEffect(() => {
-        if (messagesSnapshot) {
-            const newMessages = messagesSnapshot.docs.map((doc) => ({
-                id: doc.id,
-                photoURL: doc.data().photoURL,
-                displayName: doc.data().displayName,
-                message: doc.data().message,
-                createdAt: doc.data().createdAt,
-                userId: doc.data().userId,
-            }))
-            setMessages(newMessages)
-            setLoading(false)
-        }
-    }, [messagesSnapshot])
-
-    console.log('RENDER ALL messages')
-
-    return (
-        <Container>
-            <Grid
-                container
-                justifyContent={'center'}
-            >
-                {loading ? (
-                    <Preloader/>
-                ) : (
-                    <div
-                        onScroll={scrollHandler}
-                        style={{
-                            width: '100%',
-                            height: '90vh',
-                            border: '1px solid black',
-                            overflowY: 'auto',
-                            overflowX: 'hidden'
-                        }}
-                    >
-                        {messages.map((msg) => (
-                            <div key={msg.id} style={{
-                                margin: 10,
-                                padding: 8,
-                                borderRadius: 8,
-                                marginLeft: user?.uid === msg.userId ? 'auto' : '10px',
-                                marginRight: user?.uid === msg.userId ? '10px' : '12vh',
-                                background: user?.uid === msg.userId ? '#ffe5e5' : '#d4b7d5',
-                                width: 'fit-content'
-                            }}>
-                                <Message
-                                    idMessage={msg.id}
-                                    photoURL={msg.photoURL}
-                                    displayName={msg.displayName}
-                                    message={msg.message}
-                                    seconds={msg.createdAt && msg.createdAt.seconds}
-                                />
-                                <div ref={messagesAnchorRef}></div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                <AddMessageForm user={user}/>
-            </Grid>
-        </Container>
-    )
+        if (!isAutoScroll) return
+        const container = scrollContainerRef.current
+        if (container) container.scrollTo({top: container.scrollHeight, behavior: 'smooth'})
+        else messagesAnchorRef.current?.scrollIntoView({behavior: 'smooth', block: 'end'})
+    }, [messages, isAutoScroll])
+    const scrollHandler = (event: React.UIEvent<HTMLDivElement>) => { const el = event.currentTarget; setIsAutoScroll(el.scrollHeight - el.scrollTop - el.clientHeight < 160) }
+    const editMessage = useCallback(async (id: string, message: string) => { if (!user) return; const messageRef = doc(firestore, 'messages', id); const current = (await getDocs(query(collection(firestore, 'messages')))).docs.find(item => item.id === id); if (!current || current.data().userId !== user.uid || Date.now() - (current.data().createdAt?.seconds || 0) * 1000 > EDIT_WINDOW_SECONDS * 1000) return; await updateDoc(messageRef, {message, updatedAt: serverTimestamp()}) }, [firestore, user])
+    return <Container maxWidth="md" className="app-page"><Paper className="app-panel" sx={{height: {xs: 'calc(100vh - 150px)', md: 'calc(100vh - 160px)'}, minHeight: 420, display: 'flex', flexDirection: 'column', overflow: 'hidden'}}><Box sx={{px: 2, py: 1.5, borderBottom: 1, borderColor: 'divider'}}><Typography variant="h5">Общий чат</Typography><Typography variant="body2" color="text.secondary">Последние 100 сообщений</Typography></Box>{loading ? <Box sx={{p: 2}}><Skeleton variant="text" width="35%" height={32}/><Skeleton variant="rounded" height={64} sx={{my: 1}}/><Skeleton variant="rounded" height={64} sx={{my: 1, ml: '12%'}}/><Skeleton variant="rounded" height={64} sx={{my: 1}}/></Box> : error ? <Alert severity="error" sx={{m: 2}}>Не удалось загрузить сообщения.</Alert> : <Box ref={scrollContainerRef} onScroll={scrollHandler} sx={{flex: 1, minHeight: 0, overflowY: 'auto', p: {xs: 1, sm: 2}, bgcolor: 'action.hover'}}>{messages.map(msg => <Box key={msg.id} sx={{mb: 1.25, maxWidth: 'min(88%, 680px)', ml: user?.uid === msg.userId ? 'auto' : 0}}><Message idMessage={msg.id} userId={msg.userId} photoURL={msg.photoURL} displayName={msg.displayName} message={msg.message} seconds={msg.createdAt?.seconds || null} canEdit={user?.uid === msg.userId && Boolean(msg.createdAt && clock / 1000 - msg.createdAt.seconds <= EDIT_WINDOW_SECONDS)} onEdit={editMessage}/></Box>)}<div ref={messagesAnchorRef}/></Box>}<Box sx={{p: {xs: 1, sm: 2}, borderTop: 1, borderColor: 'divider'}}><AddMessageForm user={user} onSent={() => { setIsAutoScroll(true); requestAnimationFrame(() => { const container = scrollContainerRef.current; if (container) container.scrollTo({top: container.scrollHeight, behavior: 'smooth'}) }) }}/></Box></Paper></Container>
 }

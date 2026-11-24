@@ -4,7 +4,6 @@ import SaveIcon from '@mui/icons-material/Save'
 import CancelIcon from '@mui/icons-material/Cancel'
 import Button from '@mui/material/Button'
 import EditIcon from '@mui/icons-material/Edit'
-import Switch from '@mui/material/Switch'
 import {collection, doc, getDoc, getFirestore, setDoc, updateDoc, DocumentReference, DocumentData, DocumentSnapshot,} from 'firebase/firestore'
 import {updateProfile} from 'firebase/auth'
 import {Context, FirebaseUserAndUserType} from '../App'
@@ -36,7 +35,6 @@ export function EditDataProfile() {
     const [valueUserSex, setUserSex] = useState(user?.sex)
     const [valueUserCountry, setUserCountry] = useState(user?.country)
     const [valueTextAboutYou, setTextAboutYou] = useState(user?.aboutYou)
-    const [valueDarkMode, setDarkMode] = useState(false)
 
     const buttonSx = {
         ...(success && {
@@ -78,7 +76,7 @@ export function EditDataProfile() {
             sex: valueUserSex,
             country: valueUserCountry,
             aboutYou: valueTextAboutYou,
-            barkMode: valueDarkMode,
+            barkMode: user?.barkMode,
         }
 
         if (user) {
@@ -202,19 +200,6 @@ export function EditDataProfile() {
                         rows={3}
                         fullWidth
                     />
-                    <Typography variant="h6" sx={{
-                        mr: 2,
-                        fontFamily: 'Roboto',
-                        fontWeight: 100,
-                        color: 'black'
-                    }}>Dark mode
-                        <Switch
-                            checked={valueDarkMode}
-                            onChange={e => setDarkMode(checked)}
-                            inputProps={{'aria-label': 'controlled'}}
-                            disabled={false}
-                        />
-                    </Typography>
                 </div>
             ) : (
                 <div>
@@ -245,19 +230,6 @@ export function EditDataProfile() {
                         <Typography variant="h6">Обо мне:</Typography>
                         <Typography variant="body1">{user?.aboutYou}</Typography>
                     </Box>
-                    <Typography variant="h6" sx={{
-                        mr: 2,
-                        fontFamily: 'Roboto',
-                        fontWeight: 100,
-                        color: 'black'
-                    }}>Dark mode
-                        <Switch
-                            checked={checked}
-                            // onChange={handleChange}
-                            inputProps={{'aria-label': 'controlled'}}
-                            disabled={true}
-                        />
-                    </Typography>
                 </div>
             )}
             {isEditing ? (
